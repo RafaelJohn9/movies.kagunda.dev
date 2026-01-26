@@ -89,15 +89,22 @@ function createCard(item, type) {
   card.className = 'media-card';
   card.tabIndex = 0;
 
-  const handleClick = () => {
-      if (type === 'tv') {
-          localStorage.setItem('currentTVShowId', item.tmdb_id);
-          localStorage.setItem('currentTVShowName', item.title || 'Untitled');
-          window.location.href = 'series.html';
-      } else {
-          window.open(`${VIDSRC_API}/embed/${type}/${item.tmdb_id}`, '_blank');
-      }
-  };
+ 
+const handleClick = () => {
+    if (type === 'movie') {
+        // Store movie info for iframe page
+        localStorage.setItem('currentMovieId', item.tmdb_id);
+        localStorage.setItem('currentMovieName', item.title || 'Untitled');
+        window.location.href = 'movie.html'; // go to movie page with iframe
+    } else if (type === 'tv') {
+        localStorage.setItem('currentTVShowId', item.tmdb_id);
+        localStorage.setItem('currentTVShowName', item.title || 'Untitled');
+        window.location.href = 'series.html';
+    }
+};
+
+
+
 
   const img = document.createElement('img');
   img.className = 'media-poster';
