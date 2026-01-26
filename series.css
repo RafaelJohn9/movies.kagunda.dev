@@ -1,0 +1,447 @@
+/* ===== SERIES PAGE SPECIFIC STYLES ===== */
+
+/* Ensure consistent root variables if needed independently */
+:root {
+  --bg-color: #f8f3e9;
+  --text-color: #3b2f24;
+  --accent: #c1664a;
+  --nav-bg: rgba(93, 64, 55, 0.85);
+  --card-bg: #fdf9f3;
+  --focus: #a67c52;
+  --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Manrope', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.glass-navbar {
+  background-color: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem 0;
+}
+
+.glass-navbar > div {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .glass-navbar > div {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .glass-navbar > div {
+    padding: 0 2rem;
+  }
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40%;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+h1 span {
+  color: #e8c3ab;
+}
+
+a.back-btn {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+}
+
+a.back-btn:hover {
+  background-color: #a8573d;
+}
+
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  main {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    padding: 0 2rem;
+  }
+}
+
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.875rem;
+  text-align: center;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  h2 {
+    font-size: 2.25rem;
+  }
+}
+
+#playerArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#loadingPlaceholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  #loadingPlaceholder {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+#playerContainer {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--text-color);
+  margin: 1rem 0;
+}
+
+@media (min-width: 768px) {
+  #playerContainer {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+#playerContainer.hidden,
+#configDisplay.hidden,
+#selectionArea.hidden {
+  display: none;
+}
+
+#playerFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.config-display {
+  background-color: var(--card-bg);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 42rem;
+}
+
+.config-display > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .config-display > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+.config-display h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .config-display h3 {
+    font-size: 1.25rem;
+  }
+}
+
+.config-display p {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+#changeEpisodeBtn {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#changeEpisodeBtn:hover {
+  background-color: #a8573d;
+}
+
+#selectionArea {
+  margin-top: 2rem;
+}
+
+#selectionArea h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.selection-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .selection-controls {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.selection-controls > div {
+  flex: 1;
+}
+
+.selection-controls label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.selection-controls select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--text-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+#loadEpisodeBtn {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+@media (min-width: 768px) {
+  #loadEpisodeBtn {
+    align-self: flex-end;
+  }
+}
+
+#loadEpisodeBtn:hover {
+  background-color: #a8573d;
+}
+
+#backToPlayerBtn {
+  margin-top: 1rem;
+  background-color: #6b7280;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  #backToPlayerBtn {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+#backToPlayerBtn:hover {
+  background-color: #4b5563;
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1.5rem 0;
+  font-size: 0.875rem;
+  color: #7a6a5d;
+}
+
+/* NEW: Style for when selection mode is active */
+.selection-mode {
+  overflow-y: scroll;
+}
+
+/* NEW: Improve layout for the config display */
+.config-display > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .config-display > div {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* NEW: Style for the selection area */
+#selectionArea {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#selectionArea h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.selection-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .selection-controls {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.selection-controls > div {
+  flex: 1;
+}
+
+.selection-controls label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.selection-controls select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--text-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+#loadEpisodeBtn, #backToPlayerBtn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+#loadEpisodeBtn {
+  background-color: var(--accent);
+  color: white;
+}
+
+#loadEpisodeBtn:hover {
+  background-color: #a8573d;
+}
+
+#backToPlayerBtn {
+  background-color: #6b7280;
+  color: white;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  #backToPlayerBtn {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+#backToPlayerBtn:hover {
+  background-color: #4b5563;
+}
+
+/* ... existing footer styles ... */

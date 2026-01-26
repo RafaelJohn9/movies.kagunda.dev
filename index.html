@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies • Kagunda.dev</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Coffee-stained background overlay -->
+  <div class="coffee-bg"></div>
+
+  <!-- Glass navbar -->
+  <nav class="navbar">
+    <div class="nav-content">
+      <h1 class="logo">movies.<span>kagunda.dev</span></h1>
+      <form class="search-form" id="searchForm">
+        <input type="text" class="search-input" placeholder="Find a story…" />
+        <button type="submit" class="search-btn">🔍</button>
+      </form>
+    </div>
+  </nav>
+
+  <main class="content">
+    <section class="hero">
+      <h2 class="section-title">Movies, Series and Anime</h2>
+    </section>
+
+    <section class="media-section" id="movies-section">
+      <h3 class="subsection-title">Films</h3>
+      <div class="media-grid" id="movies-grid" role="list"></div>
+    </section>
+
+    <section class="media-section" id="series-section">
+      <h3 class="subsection-title">Series</h3>
+      <div class="media-grid" id="series-grid" role="list"></div>
+    </section>
+
+    <section class="media-section" id="anime-section">
+      <h3 class="subsection-title">Anime</h3>
+      <div class="media-grid" id="anime-grid" role="list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 John • A curated reading room for moving stories</p>
+  </footer>
+
+  <script type="module" src="api.js"></script>
+</body>
+</html>

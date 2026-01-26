@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Series • Kagunda.dev</title>
+
+  <!-- Include your fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Include your base styles -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- Include your series-specific styles -->
+  <link rel="stylesheet" href="series.css" />
+
+</head>
+<body>
+  <!-- Coffee-stained background overlay (from style.css) -->
+  <div class="coffee-bg"></div>
+
+  <!-- Glass navbar -->
+  <nav class="glass-navbar">
+    <div>
+      <h1>series.<span>kagunda.dev</span></h1>
+      <a href="index.html" class="back-btn">Back to Movies</a>
+    </div>
+  </nav>
+
+  <main>
+    <section>
+      <h2 id="showTitle">Loading...</h2>
+    </section>
+
+    <div id="playerArea">
+      <div id="loadingPlaceholder">
+        <p>Loading episode...</p>
+      </div>
+
+      <div id="playerContainer" class="hidden">
+        <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
+      </div>
+
+      <div id="configDisplay" class="config-display hidden">
+        <div>
+          <div>
+            <h3 id="episodeTitle">Episode Title</h3>
+            <p>Season <span id="currentSeason">-</span>, Episode <span id="currentEpisode">-</span></p>
+          </div>
+          <!-- Changed button to be part of the selection area -->
+          <button id="changeEpisodeBtn" type="button">Change Episode</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW: Moved selection area inside playerArea for better flow -->
+    <div id="selectionArea" class="hidden">
+      <h3>Select Season & Episode</h3>
+      <div class="selection-controls">
+        <div>
+          <label for="seasonSelect">Season:</label>
+          <select id="seasonSelect">
+            <option value="">-- Loading Seasons --</option>
+          </select>
+        </div>
+        <div>
+          <label for="episodeSelect">Episode:</label>
+          <select id="episodeSelect">
+            <option value="">-- Select Season First --</option>
+          </select>
+        </div>
+        <button id="loadEpisodeBtn" type="button">Load Episode</button>
+      </div>
+      <button id="backToPlayerBtn" type="button">Back to Player</button>
+    </div>
+  </main>
+
+
+  <footer>
+    <p>© 2026 John • A curated reading room for moving stories</p>
+  </footer>
+
+  <script src="series.js"></script>
+</body>
+</html>
