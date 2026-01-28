@@ -1,85 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="referrer" content="origin" />
-  <title>Series • Kagunda.dev</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="showTitle">StreamCinematic - Series</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a26;
+            --accent-gold: #d4af37;
+            --accent-copper: #b87333;
+            --text-primary: #e8e8f0;
+            --text-secondary: #9a9aaa;
+            --text-muted: #5a5a6a;
+            --border-subtle: rgba(212, 175, 55, 0.1);
+            --glow-gold: rgba(212, 175, 55, 0.3);
+            --shadow-deep: rgba(0, 0, 0, 0.8);
+        }
 
-  <!-- Include your fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!-- Include your base styles -->
-  <link rel="stylesheet" href="style.css" />
-  <!-- Include your series-specific styles -->
-  <link rel="stylesheet" href="series.css" />
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
 
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(184, 115, 51, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Noise overlay for film grain effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.4;
+            pointer-events: none;
+            animation: grain 8s steps(10) infinite;
+            z-index: 1;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            20% { transform: translate(-15%, 5%); }
+            30% { transform: translate(7%, -25%); }
+            40% { transform: translate(-5%, 25%); }
+            50% { transform: translate(-15%, 10%); }
+            60% { transform: translate(15%, 0%); }
+            70% { transform: translate(0%, 15%); }
+            80% { transform: translate(3%, 35%); }
+            90% { transform: translate(-10%, 10%); }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 3rem;
+            border-bottom: 1px solid var(--border-subtle);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Archivo Narrow', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px var(--glow-gold);
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            font-family: 'Archivo Narrow', sans-serif;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            padding: 3rem;
+            position: relative;
+        }
+
+        .show-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .show-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Player Container */
+        #playerContainer {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px var(--shadow-deep),
+                0 0 0 1px var(--border-subtle);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        #playerContainer::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, transparent 50%, var(--accent-copper) 100%);
+            opacity: 0.1;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .player-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+
+        #playerFrame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Loading Placeholder */
+        #loadingPlaceholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a26 100%);
+            z-index: 10;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--border-subtle);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-family: 'Archivo Narrow', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* Config Display */
+        #configDisplay {
+            background: rgba(26, 26, 38, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 4px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .episode-info {
+            flex: 1;
+        }
+
+        .episode-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .episode-meta {
+            font-family: 'Archivo Narrow', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .change-episode-btn {
+            font-family: 'Archivo Narrow', sans-serif;
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.8rem 2rem;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .change-episode-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            box-shadow: 0 4px 20px var(--glow-gold);
+        }
+
+        /* Selection Area */
+        #selectionArea {
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 4px;
+            padding: 3rem;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 20px 60px var(--shadow-deep);
+            margin-top: 2rem;
+        }
+
+        #selectionArea.hidden {
+            display: none;
+        }
+
+        .selection-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .selection-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .selection-header p {
+            font-family: 'Archivo Narrow', sans-serif;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+        }
+
+        .selection-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .control-group label {
+            font-family: 'Archivo Narrow', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .control-group select {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 1rem 1.2rem;
+            border-radius: 2px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-group select:hover,
+        .control-group select:focus {
+            border-color: var(--accent-gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .selection-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            font-family: 'Archivo Narrow', sans-serif;
+            padding: 1rem 2.5rem;
+            border-radius: 2px;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-copper);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Material Icons */
+        .material-icons {
+            font-size: inherit;
+            vertical-align: middle;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1.5rem;
+            }
+
+            nav {
+                gap: 1.5rem;
+            }
+
+            main {
+                padding: 2rem 1.5rem;
+            }
+
+            .show-title {
+                font-size: 2.5rem;
+            }
+
+            .selection-controls {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            #selectionArea {
+                padding: 2rem 1.5rem;
+            }
+
+            #configDisplay {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: flex-start;
+            }
+
+            .change-episode-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animation for page load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .show-header,
+        #playerContainer,
+        #configDisplay,
+        #selectionArea {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .show-header { animation-delay: 0.1s; }
+        #playerContainer { animation-delay: 0.2s; }
+        #configDisplay { animation-delay: 0.3s; }
+        #selectionArea { animation-delay: 0.2s; }
+    </style>
 </head>
 <body>
-  <!-- Coffee-stained background overlay (from style.css) -->
-  <div class="coffee-bg"></div>
-
-  <!-- Glass navbar -->
-  <nav class="glass-navbar">
-    <div>
-      <h1>series.<span>kagunda.dev</span></h1>
-      <a href="index.html" class="back-btn">Back to Movies</a>
-    </div>
-  </nav>
-
-  <main>
-    <section>
-      <h2 id="showTitle">Loading...</h2>
-    </section>
-
-    <div id="playerArea">
-      <div id="loadingPlaceholder">
-        <p>Loading episode...</p>
-      </div>
-
-      <div id="playerContainer" class="hidden">
-        <iframe id="playerFrame" src="" frameborder="0" allowfullscreen></iframe>
-      </div>
-
-      <div id="configDisplay" class="config-display hidden">
-        <div>
-          <div>
-            <h3 id="episodeTitle">Episode Title</h3>
-            <p>Season <span id="currentSeason">-</span>, Episode <span id="currentEpisode">-</span></p>
-          </div>
-          <!-- Changed button to be part of the selection area -->
-          <button id="changeEpisodeBtn" type="button">Change Episode</button>
+    <header>
+        <div class="header-content">
+            <div class="logo">StreamCinematic</div>
+            <nav>
+                <a href="index.html">Browse</a>
+                <a href="#">Movies</a>
+                <a href="#">Series</a>
+                <a href="#">My List</a>
+            </nav>
         </div>
-      </div>
-    </div>
+    </header>
 
-    <!-- NEW: Moved selection area inside playerArea for better flow -->
-    <div id="selectionArea" class="hidden">
-      <h3>Select Season & Episode</h3>
-      <div class="selection-controls">
-        <div>
-          <label for="seasonSelect">Season:</label>
-          <select id="seasonSelect">
-            <option value="">-- Loading Seasons --</option>
-          </select>
+    <main>
+        <div class="container">
+            <div class="show-header">
+                <h1 class="show-title" id="showTitle">Loading Series...</h1>
+            </div>
+
+            <!-- Player Container -->
+            <div id="playerContainer" class="hidden">
+                <div class="player-wrapper">
+                    <iframe id="playerFrame" allowfullscreen></iframe>
+                    <div id="loadingPlaceholder">
+                        <div class="loading-content">
+                            <div class="spinner"></div>
+                            <div class="loading-text">Loading Episode</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Config Display (Episode Info & Change Button) -->
+            <div id="configDisplay" class="hidden">
+                <div class="episode-info">
+                    <div class="episode-title" id="episodeTitle">Episode Title</div>
+                    <div class="episode-meta">
+                        Season <span id="currentSeason">1</span> : Episode <span id="currentEpisode">1</span>
+                    </div>
+                </div>
+                <button id="changeEpisodeBtn" class="change-episode-btn">
+                    <span class="material-icons">tune</span>
+                    Change Episode
+                </button>
+            </div>
+
+            <!-- Selection Area (Hidden by default, shown when user clicks Change Episode) -->
+            <div id="selectionArea" class="hidden">
+                <div class="selection-header">
+                    <h2>Select Episode</h2>
+                    <p>Choose a season and episode to watch</p>
+                </div>
+                
+                <div class="selection-controls">
+                    <div class="control-group">
+                        <label for="seasonSelect">Season</label>
+                        <select id="seasonSelect">
+                            <option value="">-- Select Season --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="episodeSelect">Episode</label>
+                        <select id="episodeSelect">
+                            <option value="">-- Select Episode --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="selection-actions">
+                    <button id="loadEpisodeBtn" class="btn btn-primary">
+                        <span class="material-icons">play_arrow</span>
+                        Load Episode
+                    </button>
+                    <button id="backToPlayerBtn" class="btn btn-secondary">
+                        <span class="material-icons">close</span>
+                        Cancel
+                    </button>
+                </div>
+            </div>
         </div>
-        <div>
-          <label for="episodeSelect">Episode:</label>
-          <select id="episodeSelect">
-            <option value="">-- Select Season First --</option>
-          </select>
-        </div>
-        <button id="loadEpisodeBtn" type="button">Load Episode</button>
-      </div>
-      <button id="backToPlayerBtn" type="button">Back to Player</button>
-    </div>
-  </main>
+    </main>
 
-
-  <footer>
-    <p>© 2026 John • A curated reading room for moving stories</p>
-  </footer>
-
-  <script src="series.js"></script>
+    <script src="series.js"></script>
 </body>
 </html>
