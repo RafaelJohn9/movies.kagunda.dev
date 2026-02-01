@@ -34,12 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingOverlay.querySelector('.loading-text').textContent = 'FAILED TO LOAD';
   });
 
-  // Prevent popups from iframe
-  window.addEventListener('beforeunload', (e) => {
+  // Block popups from iframe
+window.addEventListener('beforeunload', (e) => {
     e.preventDefault();
-    console.log('Popup/navigation attempt blocked');
+    e.returnValue = '';
     return false;
-  });
+});
+
+// Alternative: Block window.open calls
+const originalOpen = window.open;
+window.open = function() {
+    console.log('Popup blocked');
+    return null;
+};
 
   // Set iframe source
   iframe.src = embedUrl;
