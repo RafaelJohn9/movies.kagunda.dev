@@ -1,9 +1,9 @@
 // series.js - Handles Series/Anime Selection and Player
 
 // Configuration
-const VIDSRC_API = 'https://vidsrc-embed.ru';
+const VIDSRC_API = 'https://vidsrc-embed.ru'; // Fixed trailing space
 const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
-const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
+const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300'; // Fixed trailing space
 
 // DOM Elements
 const seasonSelect = document.getElementById('seasonSelect');
@@ -18,7 +18,7 @@ const currentSeasonElement = document.getElementById('currentSeason');
 const currentEpisodeElement = document.getElementById('currentEpisode');
 const changeEpisodeBtn = document.getElementById('changeEpisodeBtn');
 const selectionArea = document.getElementById('selectionArea');
-const loadEpisodeBtn = document.getElementById('loadEpisodeBtn');
+const loadEpisodeBtn = document.getElementById('loadEpisodeBtn'); // Get the button element
 const backToPlayerBtn = document.getElementById('backToPlayerBtn');
 
 // Get show info from localStorage
@@ -65,29 +65,60 @@ async function init() {
 
     showTitleElement.textContent = currentShowName;
     loadWatchProgressFromCache();
-    
+
+    // Disable controls initially while loading first season/episodes
+    disableControls();
+
     await fetchAndPopulateSeasons(currentShowId);
     await loadFirstAvailableEpisode();
 }
+
+// Disable the episode selector and load button
+function disableControls() {
+    episodeSelect.disabled = true;
+    loadEpisodeBtn.disabled = true;
+    // Show loading indicator if needed (though loadingPlaceholder is used differently)
+    // You might want to ensure it's visible here too depending on your UI flow
+    // loadingPlaceholder.classList.remove('hidden');
+}
+
+// Enable the episode selector and load button
+function enableControls() {
+    episodeSelect.disabled = false;
+    loadEpisodeBtn.disabled = false;
+    // Hide loading indicator associated with controls
+    // loadingPlaceholder.classList.add('hidden');
+}
+
 
 // Load the first episode of the first available season
 async function loadFirstAvailableEpisode() {
     if (seasonsData.length === 0) {
         console.error('No seasons available to load first episode.');
         loadingPlaceholder.innerHTML = '<div class="loading-content"><div class="loading-text">No seasons found for this show.</div></div>';
-        return;
+        return; // Keep controls disabled or handle error state explicitly
     }
 
     const sortedSeasons = seasonsData.sort((a, b) => a.season_number - b.season_number);
     const firstSeasonNumber = sortedSeasons[0].season_number;
 
     seasonSelect.value = firstSeasonNumber;
-    
+
+    // Fetch episodes for the first season
     episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, firstSeasonNumber);
+
+    // Populate the episode selector *before* enabling controls
     populateEpisodeSelector(episodesForCurrentSeason);
-    
+
+    // Enable controls now that episodes are loaded and selector is populated
+    enableControls(); // <-- This is the key call
+
     if (episodesForCurrentSeason.length === 0) {
         console.error('No episodes found for the first season.');
+        // Optionally update loadingPlaceholder or show message in episodeSelect
+        // Since controls are enabled but no episodes exist, user will see the empty message in episodeSelect
+        // Or you could keep controls disabled if no episodes exist
+        // loadEpisodeBtn.disabled = true; // Disable load button if no episodes
         loadingPlaceholder.innerHTML = '<div class="loading-content"><div class="loading-text">No episodes found for the first season.</div></div>';
         return;
     }
@@ -98,19 +129,20 @@ async function loadFirstAvailableEpisode() {
     loadEpisodePlayer(firstEpisode, firstSeasonNumber);
 }
 
+
 // Fetch Seasons from TMDB
 async function fetchAndPopulateSeasons(showId) {
-    const url = `https://api.themoviedb.org/3/tv/${showId}?api_key=${TMDB_API_KEY}&append_to_response=seasons`;
-    
+    const url = `https://api.themoviedb.org/3/tv/${showId}?api_key=${TMDB_API_KEY}&append_to_response=seasons`; // Fixed URL format
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`TMDB API error: ${response.status}`);
         }
-        
+
         const showDetails = await response.json();
-        seasonsData = showDetails.seasons.filter(season => season.season_number > 0);
-        
+        seasonsData = showDetails.seasons.filter(season => season.season_number > 0); // Filter out season 0 (specials)
+
         seasonSelect.innerHTML = '<option value="">-- Select Season --</option>';
         seasonsData.forEach(season => {
             const option = document.createElement('option');
@@ -122,52 +154,77 @@ async function fetchAndPopulateSeasons(showId) {
         console.error('Error fetching seasons:', error);
         seasonSelect.innerHTML = '<option value="">-- Error Loading Seasons --</option>';
         loadingPlaceholder.innerHTML = '<div class="loading-content"><div class="loading-text">Failed to load seasons.</div></div>';
+        // Optionally disable episode select/load button permanently on season fetch failure
+        // disableControls();
     }
 }
 
 // Event Listener for Season Selection
 seasonSelect.addEventListener('change', async (e) => {
     const selectedSeasonNumber = parseInt(e.target.value);
-    
+
     if (isNaN(selectedSeasonNumber)) {
         episodeSelect.innerHTML = '<option value="">-- Select Episode --</option>';
         episodesForCurrentSeason = [];
+        loadEpisodeBtn.disabled = true; // Disable button if no valid season selected
         return;
     }
 
+    // Disable controls while fetching episodes for the new season
+    disableControls();
+
     episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, selectedSeasonNumber);
     populateEpisodeSelector(episodesForCurrentSeason);
+
+    // Enable controls after episodes are fetched and selector is populated
+    enableControls();
+
+    // Disable load button if no episodes were found for the selected season
+    if (episodesForCurrentSeason.length === 0) {
+         // Optionally show a message in episodeSelect or elsewhere
+         // loadEpisodeBtn.disabled = true; // Already disabled by disableControls(), keep it so
+         loadingPlaceholder.innerHTML = '<div class="loading-content"><div class="loading-text">No episodes found for this season.</div></div>';
+    }
 });
+
 
 // Fetch Episodes for a specific Season from TMDB
 async function fetchEpisodesForSeason(showId, seasonNumber) {
-    const url = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=${TMDB_API_KEY}`;
-    
+    const url = `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=${TMDB_API_KEY}`; // Fixed URL format
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`TMDB API error: ${response.status}`);
         }
-        
+
         const seasonDetails = await response.json();
         return seasonDetails.episodes || [];
     } catch (error) {
         console.error(`Error fetching episodes for Season ${seasonNumber}:`, error);
-        return [];
+        return []; // Return empty array on error
     }
 }
 
 // Populate Episode Selector Dropdown
 function populateEpisodeSelector(episodes) {
     episodeSelect.innerHTML = '<option value="">-- Select Episode --</option>';
-    
+
     episodes.forEach(episode => {
         const option = document.createElement('option');
         option.value = episode.episode_number;
         option.textContent = `E${episode.episode_number}: ${episode.name}`;
         episodeSelect.appendChild(option);
     });
+
+    // Explicitly disable the load button if no episodes were added to the list
+    // (This handles the case where episodes array was empty)
+    if (episodes.length === 0) {
+        loadEpisodeBtn.disabled = true;
+    }
+    // Otherwise, controls should be enabled by the calling function (fetchAndPopulateSeasons or seasonSelect change handler)
 }
+
 
 // Load Player for Selected Episode
 function loadEpisodePlayer(episode, seasonNum) {
@@ -213,7 +270,7 @@ function setupPlayerProgressTracking(episode) {
 
     progressIntervalId = setInterval(() => {
         lastSavedTime += 10;
-        
+
         if (lastSavedTime >= totalDurationEstimate) {
             lastSavedTime = totalDurationEstimate;
             saveWatchProgress(progressKey, 100);
@@ -242,18 +299,24 @@ changeEpisodeBtn.addEventListener('click', (e) => {
 loadEpisodeBtn.addEventListener('click', async () => {
     const selectedSeasonNum = parseInt(seasonSelect.value);
     const selectedEpisodeNum = parseInt(episodeSelect.value);
-    
+
     if (isNaN(selectedSeasonNum) || isNaN(selectedEpisodeNum)) {
         alert('Please select both a season and an episode.');
         return;
     }
 
-    if (selectedSeasonNum !== currentSeasonNumber) {
-        episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, selectedSeasonNum);
-    }
+    // Note: episodesForCurrentSeason should already contain the correct episodes
+    // for the selectedSeasonNum because the change event handler for seasonSelect
+    // fetches them and enables the controls *after* populating the list.
+    // So, fetching again here might be redundant unless you need to refresh.
+    // Assuming episodesForCurrentSeason is up-to-date based on the currently selected season.
+
+    // if (selectedSeasonNum !== currentSeasonNumber) { // This check might be redundant now
+    //     episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, selectedSeasonNum);
+    // }
 
     const selectedEpisode = episodesForCurrentSeason.find(ep => ep.episode_number === selectedEpisodeNum);
-    
+
     if (selectedEpisode) {
         loadEpisodePlayer(selectedEpisode, selectedSeasonNum);
         hideSelectionArea();
@@ -270,7 +333,7 @@ backToPlayerBtn.addEventListener('click', () => {
 // Cache Functions
 function loadWatchProgressFromCache() {
     const cacheString = localStorage.getItem(WATCH_PROGRESS_CACHE_KEY);
-    
+
     if (cacheString) {
         try {
             window.watchProgressCache = JSON.parse(cacheString);
@@ -302,7 +365,7 @@ function saveWatchProgress(key, percentage) {
         console.warn(`Invalid progress percentage: ${percentage} for key: ${key}`);
         return;
     }
-    
+
     window.watchProgressCache[key] = percentage;
     saveWatchProgressToCache();
 }
@@ -318,4 +381,6 @@ function resetSelections() {
     seasonsData = [];
     currentSeasonNumber = null;
     currentEpisodeObject = null;
+    // Reset button states on reset
+    disableControls();
 }

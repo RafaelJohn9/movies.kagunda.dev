@@ -444,4 +444,17 @@ footer {
   background-color: #4b5563;
 }
 
-/* ... existing footer styles ... */
+select:disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    /* Or any other visual indication you prefer */
+}
+
+/* Optional: Style the loading placeholder */
+.loading-placeholder {
+    /* Your existing styles for the loading div */
+    text-align: center;
+    padding: 20px;
+    /* ... */
+}

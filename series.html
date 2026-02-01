@@ -681,6 +681,21 @@
         #playerContainer { animation-delay: 0.2s; }
         #configDisplay { animation-delay: 0.3s; }
         #selectionArea { animation-delay: 0.2s; }
+
+        select:disabled,
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            /* Or any other visual indication you prefer */
+        }
+
+        /* Optional: Style the loading placeholder */
+        .loading-placeholder {
+            /* Your existing styles for the loading div */
+            text-align: center;
+            padding: 20px;
+            /* ... */
+}
     </style>
 </head>
 <body>
