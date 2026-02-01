@@ -384,3 +384,17 @@ function resetSelections() {
     // Reset button states on reset
     disableControls();
 }
+
+// Block popups from iframe
+window.addEventListener('beforeunload', (e) => {
+    e.preventDefault();
+    e.returnValue = '';
+    return false;
+});
+
+// Alternative: Block window.open calls
+const originalOpen = window.open;
+window.open = function() {
+    console.log('Popup blocked');
+    return null;
+};
