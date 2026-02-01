@@ -34,6 +34,11 @@ let episodesForCurrentSeason = [];
 let currentSeasonNumber = null;
 let currentEpisodeObject = null;
 
+// Extend Window type for TypeScript compatibility
+if (!window.watchProgressCache) {
+    window.watchProgressCache = {};
+}
+
 // Initialize
 window.addEventListener('load', init);
 
@@ -79,6 +84,7 @@ async function loadFirstAvailableEpisode() {
     seasonSelect.value = firstSeasonNumber;
     
     episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, firstSeasonNumber);
+    populateEpisodeSelector(episodesForCurrentSeason);
     
     if (episodesForCurrentSeason.length === 0) {
         console.error('No episodes found for the first season.');

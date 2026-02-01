@@ -43,75 +43,80 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        /* Mobile search visibility */
+        #searchForm.mobile-visible {
+            display: block !important;
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white font-display">
     <!-- Top Navigation Bar -->
-    <header class="fixed top-0 z-50 w-full bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-4 md:px-10 py-3">
-        <div class="max-w-[1440px] mx-auto flex items-center justify-between whitespace-nowrap">
-            <div class="flex items-center gap-8">
-                <div class="flex items-center gap-2 text-primary">
-                    <div class="size-8">
+    <header class="fixed top-0 z-50 w-full bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-3 sm:px-4 md:px-10 py-3">
+        <div class="max-w-[1440px] mx-auto flex items-center justify-between whitespace-nowrap gap-4">
+            <div class="flex items-center gap-3 sm:gap-8 min-w-0">
+                <div class="flex items-center gap-1.5 sm:gap-2 text-primary flex-shrink-0">
+                    <div class="size-6 sm:size-8">
                         <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                             <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <h2 class="text-white text-xl font-black leading-tight tracking-[-0.015em]">STREAM<span class="text-primary">CINEMA</span></h2>
+                    <h2 class="text-white text-sm sm:text-xl font-black leading-tight tracking-[-0.015em] hidden sm:inline">STREAM<span class="text-primary">CINEMA</span></h2>
+                    <h2 class="text-white text-xs font-black sm:hidden">SC</h2>
                 </div>
-                <nav class="hidden md:flex items-center gap-6">
+                <nav class="hidden lg:flex items-center gap-4 xl:gap-6">
                     <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Movies</a>
                     <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Series</a>
                     <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">My List</a>
                     <a class="text-white/60 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">New & Popular</a>
                 </nav>
             </div>
-            <div class="flex flex-1 justify-end items-center gap-4">
-                <form id="searchForm" class="relative hidden sm:block max-w-64 w-full">
+            <div class="flex flex-1 justify-end items-center gap-2 sm:gap-4 min-w-0">
+                <form id="searchForm" class="relative hidden sm:block w-full max-w-xs lg:max-w-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="material-symbols-outlined text-white/50 text-xl">search</span>
+                        <span class="material-symbols-outlined text-white/50 text-lg">search</span>
                     </div>
-                    <input id="searchInputNavbar" class="w-full h-10 rounded-full border-none bg-white/10 focus:bg-white/20 focus:ring-1 focus:ring-primary text-white placeholder:text-white/40 pl-10 pr-4 text-sm font-normal" placeholder="Titles, people, genres" type="text"/>
+                    <input id="searchInputNavbar" class="w-full h-9 sm:h-10 rounded-full border-none bg-white/10 focus:bg-white/20 focus:ring-1 focus:ring-primary text-white placeholder:text-white/40 pl-9 sm:pl-10 pr-3 sm:pr-4 text-xs sm:text-sm font-normal" placeholder="Search..." type="text"/>
                 </form>
-                <button id="mobileSearchBtn" class="md:hidden text-white p-2">
-                    <span class="material-symbols-outlined">search</span>
+                <button id="mobileSearchBtn" class="lg:hidden text-white p-2 flex-shrink-0">
+                    <span class="material-symbols-outlined text-lg sm:text-xl">search</span>
                 </button>
-                <div class="flex items-center gap-4">
-                    <button class="text-white hover:text-primary transition-colors relative">
-                        <span class="material-symbols-outlined">notifications</span>
+                <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                    <button class="text-white hover:text-primary transition-colors relative p-2">
+                        <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
                         <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-primary ring-2 ring-background-dark"></span>
                     </button>
-                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-10 border border-white/20" data-alt="User profile avatar icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2Qk4SCp1Soy2k50iwfTVupncwWe1hL-11-yIicgCgFF5frRCaDwQuHm_dPAfN9dSbL6aw_dq6F_7C2TjX1AiaQYIelUQfp3b5T85k3F6a7wh0VC0CyfNxnU1OgSv6aumzLd6svjCx-pDsptIZXC_hL-vgGa7Q_IFHOT3GZG3h0fgpN9-BI-BNMhT_6abAFde0mu_zKVNzHd2cGSezs2oDmleB7T_DLh76dWTBaCoOfE47JvTN-2Ct_hjBLuNVQY0m72CPCn0AT_Q");'></div>
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-8 sm:size-10 border border-white/20" data-alt="User profile avatar icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2Qk4SCp1Soy2k50iwfTVupncwWe1hL-11-yIicgCgFF5frRCaDwQuHm_dPAfN9dSbL6aw_dq6F_7C2TjX1AiaQYIelUQfp3b5T85k3F6a7wh0VC0CyfNxnU1OgSv6aumzLd6svjCx-pDsptIZXC_hL-vgGa7Q_IFHOT3GZG3h0fgpN9-BI-BNMhT_6abAFde0mu_zKVNzHd2cGSezs2oDmleB7T_DLh76dWTBaCoOfE47JvTN-2Ct_hjBLuNVQY0m72CPCn0AT_Q");'></div>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="relative w-full h-[85vh] @container">
+    <section class="relative w-full h-[85vh] pt-16 @container">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" data-alt="Cinematic background with digital cyber frontier landscape" style='background-image: linear-gradient(to right, rgba(10, 5, 8, 0.9) 10%, rgba(10, 5, 8, 0.4) 40%, rgba(10, 5, 8, 0) 100%), 
                                      linear-gradient(to top, rgba(10, 5, 8, 1) 0%, rgba(10, 5, 8, 0) 30%), 
                                      url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqUzY6y5L-0ZNoXMEEVK4pk_efaMItZ7Dg6mn_Fnd0C-gwM46l9Qvh-Og6txPVRgj4f_muTelVDnL-Zg5w7qkScm24zUDW568u__DgEyPAjoMDapR0T3hI6MTefhcKt7FvCia-ymY61PEnSvP6v6llyYOYicn7P__44ijVKSr5DpqUHRp_6-gvNN-TOuRO1hF5r-e87i22pnPBt1Mx2umJcPZN9IRIc8MSrmG35wd1yc5V-HG0xVsyFDSc7-y_kOl2YgurAPRwaac");'>
         </div>
-        <div class="relative h-full max-w-[1440px] mx-auto px-6 md:px-10 flex flex-col justify-center items-start gap-6 pt-20">
-            <div class="flex flex-col gap-4 max-w-2xl">
-                <div class="flex items-center gap-2">
-                    <span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">New Release</span>
-                    <span class="text-white/60 text-sm font-medium">2024 • 2h 14m • Sci-Fi Thriller</span>
+        <div class="relative h-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 flex flex-col justify-center items-start gap-3 sm:gap-6">
+            <div class="flex flex-col gap-3 sm:gap-4 max-w-2xl">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="bg-primary text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">New Release</span>
+                    <span class="text-white/60 text-xs sm:text-sm font-medium">2024 • 2h 14m • Sci-Fi</span>
                 </div>
-                <h1 class="text-white text-5xl md:text-7xl font-black leading-tight tracking-[-0.033em] uppercase italic">
+                <h1 class="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-[-0.033em] uppercase italic">
                     The <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">Cyber</span> Frontier
                 </h1>
-                <p class="text-white/80 text-base md:text-lg leading-relaxed max-w-xl">
-                    In a world dominated by sovereign code, one hacker must infiltrate the Neural Net to save humanity's final physical archive. Experience the blockbuster event of the year.
+                <p class="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl">
+                    In a world dominated by sovereign code, one hacker must infiltrate the Neural Net to save humanity's final physical archive.
                 </p>
             </div>
-            <div class="flex flex-wrap gap-4 mt-2">
-                <button class="flex min-w-[160px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 md:h-14 px-6 bg-primary text-white text-lg font-bold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(236,19,164,0.4)]">
-                    <span class="material-symbols-outlined mr-2">play_arrow</span>
+            <div class="flex flex-wrap gap-2 sm:gap-4 mt-2 w-full sm:w-auto">
+                <button class="flex flex-1 sm:flex-none min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-xl h-10 sm:h-12 md:h-14 px-4 sm:px-6 bg-primary text-white text-sm sm:text-lg font-bold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(236,19,164,0.4)]">
+                    <span class="material-symbols-outlined mr-2 text-sm sm:text-base">play_arrow</span>
                     <span>Watch Now</span>
                 </button>
-                <button class="flex min-w-[160px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 md:h-14 px-6 bg-white/10 backdrop-blur-md text-white text-lg font-bold border border-white/20 transition-colors hover:bg-white/20">
-                    <span class="material-symbols-outlined mr-2">info</span>
+                <button class="flex flex-1 sm:flex-none min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-xl h-10 sm:h-12 md:h-14 px-4 sm:px-6 bg-white/10 backdrop-blur-md text-white text-sm sm:text-lg font-bold border border-white/20 transition-colors hover:bg-white/20">
+                    <span class="material-symbols-outlined mr-2 text-sm sm:text-base">info</span>
                     <span>More Info</span>
                 </button>
             </div>
@@ -119,60 +124,60 @@
     </section>
 
     <!-- Content Sections -->
-    <main class="relative z-10 -mt-20 pb-20 space-y-12">
+    <main class="relative z-10 -mt-20 pb-20 space-y-8 sm:space-y-12">
         <!-- Search Results Section (Hidden by default) -->
-        <section id="search-results-section" class="max-w-[1440px] mx-auto hidden">
-            <div class="flex items-center justify-between px-6 md:px-10 mb-2">
-                <h2 class="text-white text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
+        <section id="search-results-section" class="max-w-[1440px] mx-auto hidden px-3 sm:px-6 md:px-10">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
                     Search Results
-                    <span class="material-symbols-outlined text-primary">search</span>
+                    <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">search</span>
                 </h2>
             </div>
-            <div id="search-results" class="flex overflow-x-auto no-scrollbar scroll-smooth px-6 md:px-10 py-4">
+            <div id="search-results" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4">
                 <!-- Search results will be inserted here -->
             </div>
         </section>
 
         <!-- Trending Now (Movies) -->
-        <section id="movies-section" class="max-w-[1440px] mx-auto">
-            <div class="flex items-center justify-between px-6 md:px-10 mb-2">
-                <h2 class="text-white text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
+        <section id="movies-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
+            <div class="flex items-center justify-between mb-2 gap-2">
+                <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2 flex-1 min-w-0">
                     Trending Now 
-                    <span class="material-symbols-outlined text-primary">trending_up</span>
+                    <span class="material-symbols-outlined text-primary text-xl sm:text-2xl flex-shrink-0">trending_up</span>
                 </h2>
-                <a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+                <a class="text-primary text-xs sm:text-sm font-bold hover:underline flex-shrink-0" href="#">View All</a>
             </div>
-            <div id="movies-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth px-6 md:px-10 py-4">
-                <div class="flex items-stretch gap-4 md:gap-6">
+            <div id="movies-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
+                <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
                     <!-- Movie cards will be inserted here -->
-                    <div class="flex items-stretch gap-4 md:gap-6">
+                    <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
                         <!-- Loading placeholders -->
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
                     </div>
@@ -181,42 +186,42 @@
         </section>
 
         <!-- New Releases (TV Shows) -->
-        <section id="series-section" class="max-w-[1440px] mx-auto">
-            <div class="flex items-center justify-between px-6 md:px-10 mb-2">
-                <h2 class="text-white text-2xl md:text-3xl font-bold leading-tight tracking-tight">New Releases</h2>
-                <a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+        <section id="series-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
+            <div class="flex items-center justify-between mb-2 gap-2">
+                <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex-1">New Releases</h2>
+                <a class="text-primary text-xs sm:text-sm font-bold hover:underline flex-shrink-0" href="#">View All</a>
             </div>
-            <div id="series-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth px-6 md:px-10 py-4">
-                <div class="flex items-stretch gap-4 md:gap-6">
+            <div id="series-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
+                <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
                     <!-- TV show cards will be inserted here -->
-                    <div class="flex items-stretch gap-4 md:gap-6">
+                    <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
                         <!-- Loading placeholders -->
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
                     </div>
@@ -225,42 +230,42 @@
         </section>
 
         <!-- Anime Section -->
-        <section id="anime-section" class="max-w-[1440px] mx-auto">
-            <div class="flex items-center justify-between px-6 md:px-10 mb-2">
-                <h2 class="text-white text-2xl md:text-3xl font-bold leading-tight tracking-tight">Popular Anime</h2>
-                <a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+        <section id="anime-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
+            <div class="flex items-center justify-between mb-2 gap-2">
+                <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex-1">Popular Anime</h2>
+                <a class="text-primary text-xs sm:text-sm font-bold hover:underline flex-shrink-0" href="#">View All</a>
             </div>
-            <div id="anime-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth px-6 md:px-10 py-4">
-                <div class="flex items-stretch gap-4 md:gap-6">
+            <div id="anime-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
+                <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
                     <!-- Anime cards will be inserted here -->
-                    <div class="flex items-stretch gap-4 md:gap-6">
+                    <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
                         <!-- Loading placeholders -->
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col">
-                                <div class="h-4 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-3 bg-gray-800 rounded w-1/2 mt-2"></div>
+                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
+                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
+                            <div class="flex flex-col gap-1">
+                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
                             </div>
                         </div>
                     </div>
@@ -269,21 +274,21 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="max-w-[1440px] mx-auto px-6 md:px-10">
-            <div class="relative w-full rounded-2xl overflow-hidden bg-surface-dark border border-white/5 p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
+        <section class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
+            <div class="relative w-full rounded-lg sm:rounded-2xl overflow-hidden bg-surface-dark border border-white/5 p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 <div class="flex-1 text-center md:text-left">
-                    <h3 class="text-white text-3xl font-black mb-4">The ultimate cinematic experience in your living room.</h3>
-                    <p class="text-white/70 text-lg mb-6">Enjoy unlimited access to the world's most acclaimed movies and series. Cancel anytime.</p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                        <button class="bg-primary text-white font-bold px-8 py-3 rounded-xl hover:opacity-90 transition-opacity">Start Watching</button>
-                        <button class="bg-white/10 text-white font-bold px-8 py-3 rounded-xl hover:bg-white/20 transition-colors">Gift A Subscription</button>
+                    <h3 class="text-white text-2xl sm:text-3xl font-black mb-3 sm:mb-4">The ultimate cinematic experience.</h3>
+                    <p class="text-white/70 text-sm sm:text-lg mb-4 sm:mb-6">Enjoy unlimited access to movies and series. Cancel anytime.</p>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
+                        <button class="bg-primary text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:opacity-90 transition-opacity text-sm sm:text-base">Start Watching</button>
+                        <button class="bg-white/10 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-white/20 transition-colors text-sm sm:text-base">Gift Sub</button>
                     </div>
                 </div>
-                <div class="hidden lg:flex flex-1 justify-center relative">
-                    <div class="w-64 h-80 bg-primary/20 rounded-xl blur-3xl absolute -z-10 animate-pulse"></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="w-32 h-44 bg-cover bg-center rounded-lg rotate-[-6deg] translate-y-4" data-alt="Secondary movie poster 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZqb9Ur06xmQr_kTsUlATEw7qxxLAV2vgVxoYUbD_bmjsy1mzWHpTz9mWb1TrBms2TM4aFv4MOdQi5UDWv_sew5dPibQBpxUPBq7KVamaKJi3_oJbOOu0w0hZ_GFwsDbZ3JIL9NdmqiAy9hCK1STUHJUpwr0R0crSSM7Zzl2bfgRefDixPzxLVvVORPlT1nm0Mp8uwTubPBXqI-x26gSZEff519YzP1_PBfd-wJR5U2HbJFn9xIRHrZBKP6Ra74km8Ik2kvTQW5_M");'></div>
-                        <div class="w-32 h-44 bg-cover bg-center rounded-lg rotate-[6deg]" data-alt="Secondary movie poster 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY2XVAYGYXaVWejaVhKEopOmojTsPX32TQTUszK2jbxKpwCdRpVzi_O4nfDNHpT_Re3AvoOUTcYcTv0IPEv-kyeGTKRs-pyF2S6FbUZrfl-68GNiA9GB0oqzjq-iEBBUYJZhR-feuwAz3CaNE2Z5FHtHHTWin3B4z-LUKhxtkBZqNOC8cIhB4OgGogmDYVTFAqf1cYXW_JKtcrQzQaZGNUCBN7V0bvW5dxL8BCfNNXLNNf8eV8RmVQKgBdqOUXJncIxRz7P35Ul-M");'></div>
+                <div class="hidden lg:flex flex-1 justify-center relative w-full">
+                    <div class="w-48 sm:w-64 h-60 sm:h-80 bg-primary/20 rounded-xl blur-3xl absolute -z-10 animate-pulse"></div>
+                    <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                        <div class="w-24 sm:w-32 h-32 sm:h-44 bg-cover bg-center rounded-lg rotate-[-6deg] translate-y-4" data-alt="Secondary movie poster 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZqb9Ur06xmQr_kTsUlATEw7qxxLAV2vgVxoYUbD_bmjsy1mzWHpTz9mWb1TrBms2TM4aFv4MOdQi5UDWv_sew5dPibQBpxUPBq7KVamaKJi3_oJbOOu0w0hZ_GFwsDbZ3JIL9NdmqiAy9hCK1STUHJUpwr0R0crSSM7Zzl2bfgRefDixPzxLVvVORPlT1nm0Mp8uwTubPBXqI-x26gSZEff519YzP1_PBfd-wJR5U2HbJFn9xIRHrZBKP6Ra74km8Ik2kvTQW5_M");'></div>
+                        <div class="w-24 sm:w-32 h-32 sm:h-44 bg-cover bg-center rounded-lg rotate-[6deg]" data-alt="Secondary movie poster 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY2XVAYGYXaVWejaVhKEopOmojTsPX32TQTUszK2jbxKpwCdRpVzi_O4nfDNHpT_Re3AvoOUTcYcTv0IPEv-kyeGTKRs-pyF2S6FbUZrfl-68GNiA9GB0oqzjq-iEBBUYJZhR-feuwAz3CaNE2Z5FHtHHTWin3B4z-LUKhxtkBZqNOC8cIhB4OgGogmDYVTFAqf1cYXW_JKtcrQzQaZGNUCBN7V0bvW5dxL8BCfNNXLNNf8eV8RmVQKgBdqOUXJncIxRz7P35Ul-M");'></div>
                     </div>
                 </div>
             </div>
@@ -291,23 +296,23 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-black/40 border-t border-white/5 py-12 px-6 md:px-10">
+    <footer class="bg-black/40 border-t border-white/5 py-8 sm:py-12 px-3 sm:px-6 md:px-10">
         <div class="max-w-[1440px] mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
-                <div class="col-span-2 lg:col-span-1">
-                    <div class="flex items-center gap-2 text-primary mb-6">
-                        <div class="size-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 mb-8 sm:mb-12">
+                <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                    <div class="flex items-center gap-1.5 sm:gap-2 text-primary mb-4 sm:mb-6">
+                        <div class="size-5 sm:size-6">
                             <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                                 <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <h2 class="text-white text-lg font-black tracking-tight uppercase">STREAMCINEMA</h2>
+                        <h2 class="text-white text-sm sm:text-lg font-black tracking-tight uppercase">STREAMCINEMA</h2>
                     </div>
-                    <p class="text-white/50 text-sm leading-relaxed">The best destination for global storytelling. Original series, epic blockbusters, and groundbreaking documentaries.</p>
+                    <p class="text-white/50 text-xs sm:text-sm leading-relaxed">Global storytelling. Original series, blockbusters, and documentaries.</p>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold mb-4">Explore</h4>
-                    <ul class="space-y-2 text-white/50 text-sm">
+                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Explore</h4>
+                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
                         <li><a class="hover:text-primary" href="#">Movies</a></li>
                         <li><a class="hover:text-primary" href="#">TV Series</a></li>
                         <li><a class="hover:text-primary" href="#">Documentaries</a></li>
@@ -315,56 +320,38 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold mb-4">Support</h4>
-                    <ul class="space-y-2 text-white/50 text-sm">
+                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Support</h4>
+                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
                         <li><a class="hover:text-primary" href="#">Help Center</a></li>
                         <li><a class="hover:text-primary" href="#">Contact Us</a></li>
                         <li><a class="hover:text-primary" href="#">Account</a></li>
                         <li><a class="hover:text-primary" href="#">Devices</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="text-white font-bold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-white/50 text-sm">
+                <div class="col-span-2 sm:col-span-1">
+                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Legal</h4>
+                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
                         <li><a class="hover:text-primary" href="#">Terms of Service</a></li>
                         <li><a class="hover:text-primary" href="#">Privacy Policy</a></li>
                         <li><a class="hover:text-primary" href="#">Cookie Prefs</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="text-white font-bold mb-4">Connect</h4>
-                    <div class="flex gap-4">
-                        <a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors" href="#">
-                            <span class="material-symbols-outlined text-sm">share</span>
-                        </a>
-                        <a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors" href="#">
-                            <span class="material-symbols-outlined text-sm">public</span>
-                        </a>
-                        <a class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors" href="#">
-                            <span class="material-symbols-outlined text-sm">language</span>
-                        </a>
-                    </div>
-                </div>
             </div>
-            <div class="pt-8 border-t border-white/5 text-center md:text-left text-white/30 text-xs">
-                © 2024 StreamCinema Interactive. All rights reserved.
+            <div class="pt-6 sm:pt-8 border-t border-white/5 text-center sm:text-left text-white/30 text-xs">
+                © 2024 StreamCinema. All rights reserved.
             </div>
         </div>
     </footer>
 
     <script>
-        // api.js — Robust, clean, and fetches up to 12 items per category with caching
-
-        // 🔧 CONFIG (no trailing spaces!)
+        // [Script remains the same - update createCard function card sizes]
         const VIDSRC_API = 'https://vidsrc-embed.ru';
         const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
         const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
-        const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+        const CACHE_DURATION = 3600000;
 
-        // 💾 Simple cache manager
         const cache = {
           data: {},
-          
           get(key) {
             const item = this.data[key];
             if (!item) return null;
@@ -374,17 +361,14 @@
             }
             return item.value;
           },
-          
           set(key, value) {
             this.data[key] = { value, timestamp: Date.now() };
           },
-          
           clear() {
             this.data = {};
           }
         };
 
-        // 📡 Fetch from TMDB safely with caching
         async function fetchFromTMDB(path) {
           const cacheKey = `tmdb_${path}`;
           const cached = cache.get(cacheKey);
@@ -402,7 +386,6 @@
           }
         }
 
-        // 🖼️ Get poster URL
         async function getPoster(tmdbId, type) {
           const data = await fetchFromTMDB(`/${type}/${tmdbId}`);
           if (data?.poster_path) {
@@ -411,7 +394,6 @@
           return 'https://via.placeholder.com/160x240?text=No+Poster';
         }
 
-        // 🎬 Fetch latest movies until we have 12 valid items
         async function fetchItemsUntilLimit(endpoint, limit = 12) {
           let items = [];
           let page = 1;
@@ -439,17 +421,15 @@
           return items.slice(0, limit);
         }
 
-        // 1. Updated createCard function to match new design
         function createCard(item, type) {
           const card = document.createElement('div');
-          card.className = 'group flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px] cursor-pointer transition-all duration-300'; // Match StreamCinema card sizes
+          card.className = 'group flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px] cursor-pointer transition-all duration-300';
 
           const handleClick = () => {
             if (type === 'movie') {
-                // Store movie info for iframe page
                 localStorage.setItem('currentMovieId', item.tmdb_id);
                 localStorage.setItem('currentMovieName', item.title || 'Untitled');
-                window.location.href = 'movie.html'; // go to movie page with iframe
+                window.location.href = 'movie.html';
             } else if (type === 'tv') {
                 localStorage.setItem('currentTVShowId', item.tmdb_id);
                 localStorage.setItem('currentTVShowName', item.title || 'Untitled');
@@ -458,32 +438,30 @@
           };
 
           const imgContainer = document.createElement('div');
-          imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-xl'; // Maintain aspect ratio
+          imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-lg sm:rounded-xl';
 
           const img = document.createElement('img');
-          img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'; // Smooth zoom effect
+          img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110';
           img.alt = item.title || 'Untitled';
           img.loading = 'lazy';
           img.src = 'https://via.placeholder.com/160x240?text=Loading...';
 
-          // Load actual image after element is added to DOM
           setTimeout(async () => {
             const posterUrl = await getPoster(item.tmdb_id, type);
             img.src = posterUrl;
           }, 100);
 
-          // Overlay buttons container (appears on hover)
           const overlay = document.createElement('div');
-          overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4';
+          overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 sm:p-4';
           const buttonGroup = document.createElement('div');
           buttonGroup.className = 'flex gap-2';
           const playButton = document.createElement('button');
-          playButton.className = 'bg-primary rounded-full p-2 text-white';
-          playButton.innerHTML = '<span class="material-symbols-outlined text-sm">play_arrow</span>';
-          playButton.onclick = (e) => { e.stopPropagation(); handleClick(); }; // Prevent card click propagation
+          playButton.className = 'bg-primary rounded-full p-1.5 sm:p-2 text-white';
+          playButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">play_arrow</span>';
+          playButton.onclick = (e) => { e.stopPropagation(); handleClick(); };
           const listButton = document.createElement('button');
-          listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-2 text-white';
-          listButton.innerHTML = '<span class="material-symbols-outlined text-sm">add</span>';
+          listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-1.5 sm:p-2 text-white';
+          listButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">add</span>';
           buttonGroup.appendChild(playButton);
           buttonGroup.appendChild(listButton);
           overlay.appendChild(buttonGroup);
@@ -492,14 +470,13 @@
           imgContainer.appendChild(overlay);
 
           const titleEl = document.createElement('div');
-          titleEl.className = 'flex flex-col';
+          titleEl.className = 'flex flex-col gap-1';
           const titleText = document.createElement('p');
-          titleText.className = 'text-white text-sm md:text-base font-bold leading-none truncate'; // Smaller base font size
-          titleText.textContent = (item.title || 'Untitled').substring(0, 30);
+          titleText.className = 'text-white text-xs sm:text-sm font-bold leading-none truncate';
+          titleText.textContent = (item.title || 'Untitled').substring(0, 25);
           const metaInfo = document.createElement('p');
-          metaInfo.className = 'text-white/50 text-xs mt-1';
-          // Basic meta-info placeholder - could be enhanced with release date
-          metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`; 
+          metaInfo.className = 'text-white/50 text-[10px] sm:text-xs';
+          metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`;
           titleEl.appendChild(titleText);
           titleEl.appendChild(metaInfo);
 
@@ -516,7 +493,6 @@
           return card;
         }
 
-        // Search movies & TV shows by query with caching
         async function searchMedia(query) {
           if (!query.trim()) return [];
 
@@ -554,7 +530,6 @@
           }
         }
 
-        // 2. Updated displaySearchResults function to work with new layout
         function displaySearchResults(results) {
             const searchSection = document.getElementById('search-results-section');
             const container = document.getElementById('search-results');
@@ -563,16 +538,13 @@
                 return;
             }
 
-            // Show the search section
             searchSection.classList.remove('hidden');
-            // Hide other sections
             document.getElementById('movies-section').classList.add('hidden');
             document.getElementById('series-section').classList.add('hidden');
             document.getElementById('anime-section').classList.add('hidden');
 
-            // Clear previous results
             container.innerHTML = '';
-            container.appendChild(document.createElement('div')).className = 'flex items-stretch gap-4 md:gap-6';
+            container.appendChild(document.createElement('div')).className = 'flex items-stretch gap-3 sm:gap-4 md:gap-6';
 
             results.slice(0, 12).forEach(item => {
                 const card = createCard({
@@ -585,17 +557,15 @@
             });
         }
 
-        // 3. Updated search form handling for new inputs
         document.getElementById('searchForm')?.addEventListener('submit', async (e) => {
           e.preventDefault();
-          const query = e.target.querySelector('.search-input').value.trim();
+          const query = e.target.querySelector('input').value.trim();
           if (!query) return;
 
           const results = await searchMedia(query);
           displaySearchResults(results);
         });
 
-        // Handle new search inputs from the header
         document.getElementById('searchInputNavbar')?.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -606,18 +576,33 @@
                 displaySearchResults(results);
             }
         });
-        // Optional: Add search button click handler if needed
-        document.getElementById('mobileSearchBtn')?.addEventListener('click', async () => {
-            const queryInput = document.getElementById('searchInputNavbar');
-            const query = queryInput?.value.trim();
-            if (!query) return;
 
-            const results = await searchMedia(query);
-            displaySearchResults(results);
+        document.getElementById('mobileSearchBtn')?.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const searchForm = document.getElementById('searchForm');
+            const queryInput = document.getElementById('searchInputNavbar');
+            
+            if (!searchForm.classList.contains('mobile-visible')) {
+                searchForm.classList.add('mobile-visible');
+                queryInput?.focus();
+            } else {
+                const query = queryInput?.value.trim();
+                if (query) {
+                    const results = await searchMedia(query);
+                    displaySearchResults(results);
+                }
+                searchForm.classList.remove('mobile-visible');
+            }
         });
 
+        document.addEventListener('click', (e) => {
+            const searchForm = document.getElementById('searchForm');
+            const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+            if (!searchForm.contains(e.target) && !mobileSearchBtn.contains(e.target)) {
+                searchForm.classList.remove('mobile-visible');
+            }
+        });
 
-        // 🚀 Initialize app
         async function init() {
           const moviesGrid = document.getElementById('movies-grid');
           const seriesGrid = document.getElementById('series-grid');
@@ -635,18 +620,15 @@
             const series = tvShows.slice(0, 6);
             const anime = tvShows.slice(6, 12);
 
-            // Clear loading placeholders and add movie cards
-            moviesGrid.innerHTML = '<div class="flex items-stretch gap-4 md:gap-6"></div>';
+            moviesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
             const moviesParent = moviesGrid.firstChild;
             movies.forEach(m => moviesParent.appendChild(createCard(m, 'movie')));
 
-            // Clear loading placeholders and add TV show cards
-            seriesGrid.innerHTML = '<div class="flex items-stretch gap-4 md:gap-6"></div>';
+            seriesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
             const seriesParent = seriesGrid.firstChild;
             series.forEach(s => seriesParent.appendChild(createCard(s, 'tv')));
 
-            // Clear loading placeholders and add anime cards
-            animeGrid.innerHTML = '<div class="flex items-stretch gap-4 md:gap-6"></div>';
+            animeGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
             const animeParent = animeGrid.firstChild;
             anime.forEach(a => animeParent.appendChild(createCard(a, 'tv')));
 
@@ -655,7 +637,6 @@
           }
         }
 
-        // 🧠 Wait for DOM
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', init);
         } else {

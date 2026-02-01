@@ -1,7 +1,7 @@
 // api.js — Robust, clean, and fetches up to 12 items per category with caching
 
 // 🔧 CONFIG (no trailing spaces!)
-const VIDSRC_API = 'https://vidsrc-embed.ru';
+const VIDSRC_API = 'https://vidsrc.in';
 const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
 const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
 const CACHE_DURATION = 3600000; // 1 hour in milliseconds

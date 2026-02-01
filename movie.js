@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Set iframe source
   iframe.src = embedUrl;
-  iframe.referrerPolicy = 'no-referrer-when-downgrade'; // optional security
+  iframe.referrerPolicy = 'origin';
 
   // Fallback: hide loading overlay after 5 seconds if load event doesn't fire
   setTimeout(() => {
