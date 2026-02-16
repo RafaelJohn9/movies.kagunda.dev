@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="referrer" content="origin" />
     <title>StreamCinema - Watch Movies & Series Online</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -35,7 +36,6 @@
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
         }
-        /* Custom scrollbar hiding */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -43,14 +43,25 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* Mobile search visibility */
         #searchForm.mobile-visible {
             display: block !important;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
         }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white font-display">
-    <!-- Top Navigation Bar -->
     <header class="fixed top-0 z-50 w-full bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-3 sm:px-4 md:px-10 py-3">
         <div class="max-w-[1440px] mx-auto flex items-center justify-between whitespace-nowrap gap-4">
             <div class="flex items-center gap-3 sm:gap-8 min-w-0">
@@ -66,7 +77,7 @@
                 <nav class="hidden lg:flex items-center gap-4 xl:gap-6">
                     <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Movies</a>
                     <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Series</a>
-                    <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">My List</a>
+                    <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="mylist.html">My List</a>
                     <a class="text-white/60 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">New & Popular</a>
                 </nav>
             </div>
@@ -80,18 +91,10 @@
                 <button id="mobileSearchBtn" class="lg:hidden text-white p-2 flex-shrink-0">
                     <span class="material-symbols-outlined text-lg sm:text-xl">search</span>
                 </button>
-                <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-                    <button class="text-white hover:text-primary transition-colors relative p-2">
-                        <span class="material-symbols-outlined text-lg sm:text-xl">notifications</span>
-                        <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-primary ring-2 ring-background-dark"></span>
-                    </button>
-                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-8 sm:size-10 border border-white/20" data-alt="User profile avatar icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD2Qk4SCp1Soy2k50iwfTVupncwWe1hL-11-yIicgCgFF5frRCaDwQuHm_dPAfN9dSbL6aw_dq6F_7C2TjX1AiaQYIelUQfp3b5T85k3F6a7wh0VC0CyfNxnU1OgSv6aumzLd6svjCx-pDsptIZXC_hL-vgGa7Q_IFHOT3GZG3h0fgpN9-BI-BNMhT_6abAFde0mu_zKVNzHd2cGSezs2oDmleB7T_DLh76dWTBaCoOfE47JvTN-2Ct_hjBLuNVQY0m72CPCn0AT_Q");'></div>
-                </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="relative w-full h-[85vh] pt-16 @container">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style='background-image: url("https://i.postimg.cc/tJPxP74c/marvel.jpg");'>
             <div class="bg-black/50 h-full"></div>
@@ -122,9 +125,7 @@
         </div>
     </section>
 
-    <!-- Content Sections -->
     <main class="relative z-10 -mt-20 pb-20 space-y-8 sm:space-y-12">
-        <!-- Search Results Section (Hidden by default) -->
         <section id="search-results-section" class="max-w-[1440px] mx-auto hidden px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
@@ -132,12 +133,9 @@
                     <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">search</span>
                 </h2>
             </div>
-            <div id="search-results" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4">
-                <!-- Search results will be inserted here -->
-            </div>
+            <div id="search-results" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4"></div>
         </section>
 
-        <!-- Trending Now (Movies) -->
         <section id="movies-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2 gap-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2 flex-1 min-w-0">
@@ -148,30 +146,7 @@
             </div>
             <div id="movies-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
                 <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                    <!-- Movie cards will be inserted here -->
                     <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                        <!-- Loading placeholders -->
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
                         <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
                             <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
                             <div class="flex flex-col gap-1">
@@ -184,7 +159,6 @@
             </div>
         </section>
 
-        <!-- New Releases (TV Shows) -->
         <section id="series-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2 gap-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex-1">New Releases</h2>
@@ -192,30 +166,7 @@
             </div>
             <div id="series-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
                 <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                    <!-- TV show cards will be inserted here -->
                     <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                        <!-- Loading placeholders -->
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
                         <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
                             <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
                             <div class="flex flex-col gap-1">
@@ -228,7 +179,6 @@
             </div>
         </section>
 
-        <!-- Anime Section -->
         <section id="anime-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2 gap-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex-1">Popular Anime</h2>
@@ -236,30 +186,7 @@
             </div>
             <div id="anime-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
                 <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                    <!-- Anime cards will be inserted here -->
                     <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                        <!-- Loading placeholders -->
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
                         <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
                             <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
                             <div class="flex flex-col gap-1">
@@ -272,7 +199,6 @@
             </div>
         </section>
 
-        <!-- CTA Section -->
         <section class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="relative w-full rounded-lg sm:rounded-2xl overflow-hidden bg-surface-dark border border-white/5 p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 <div class="flex-1 text-center md:text-left">
@@ -286,15 +212,14 @@
                 <div class="hidden lg:flex flex-1 justify-center relative w-full">
                     <div class="w-48 sm:w-64 h-60 sm:h-80 bg-primary/20 rounded-xl blur-3xl absolute -z-10 animate-pulse"></div>
                     <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                        <div class="w-24 sm:w-32 h-32 sm:h-44 bg-cover bg-center rounded-lg rotate-[-6deg] translate-y-4" data-alt="Secondary movie poster 1" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZqb9Ur06xmQr_kTsUlATEw7qxxLAV2vgVxoYUbD_bmjsy1mzWHpTz9mWb1TrBms2TM4aFv4MOdQi5UDWv_sew5dPibQBpxUPBq7KVamaKJi3_oJbOOu0w0hZ_GFwsDbZ3JIL9NdmqiAy9hCK1STUHJUpwr0R0crSSM7Zzl2bfgRefDixPzxLVvVORPlT1nm0Mp8uwTubPBXqI-x26gSZEff519YzP1_PBfd-wJR5U2HbJFn9xIRHrZBKP6Ra74km8Ik2kvTQW5_M");'></div>
-                        <div class="w-24 sm:w-32 h-32 sm:h-44 bg-cover bg-center rounded-lg rotate-[6deg]" data-alt="Secondary movie poster 2" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY2XVAYGYXaVWejaVhKEopOmojTsPX32TQTUszK2jbxKpwCdRpVzi_O4nfDNHpT_Re3AvoOUTcYcTv0IPEv-kyeGTKRs-pyF2S6FbUZrfl-68GNiA9GB0oqzjq-iEBBUYJZhR-feuwAz3CaNE2Z5FHtHHTWin3B4z-LUKhxtkBZqNOC8cIhB4OgGogmDYVTFAqf1cYXW_JKtcrQzQaZGNUCBN7V0bvW5dxL8BCfNNXLNNf8eV8RmVQKgBdqOUXJncIxRz7P35Ul-M");'></div>
+                        <div class="w-24 sm:w-32 h-32 sm:h-44 bg-cover bg-center rounded-lg rotate-[-6deg] translate-y-4" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZqb9Ur06xmQr_kTsUlATEw7qxxLAV2vgVxoYUbD_bmjsy1mzWHpTz9mWb1TrBms2TM4aFv4MOdQi5UDWv_sew5dPibQBpxUPBq7KVamaKJi3_oJbOOu0w0hZ_GFwsDbZ3JIL9NdmqiAy9hCK1STUHJUpwr0R0crSSM7Zzl2bfgRefDixPzxLVvVORPlT1nm0Mp8uwTubPBXqI-x26gSZEff519YzP1_PBfd-wJR5U2HbJFn9xIRHrZBKP6Ra74km8Ik2kvTQW5_M");'></div>
+                        <div class="w-24 sm:w-32 h-32 sm:h-44 bg-cover bg-center rounded-lg rotate-[6deg]" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBY2XVAYGYXaVWejaVhKEopOmojTsPX32TQTUszK2jbxKpwCdRpVzi_O4nfDNHpT_Re3AvoOUTcYcTv0IPEv-kyeGTKRs-pyF2S6FbUZrfl-68GNiA9GB0oqzjq-iEBBUYJZhR-feuwAz3CaNE2Z5FHtHHTWin3B4z-LUKhxtkBZqNOC8cIhB4OgGogmDYVTFAqf1cYXW_JKtcrQzQaZGNUCBN7V0bvW5dxL8BCfNNXLNNf8eV8RmVQKgBdqOUXJncIxRz7P35Ul-M");'></div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-black/40 border-t border-white/5 py-8 sm:py-12 px-3 sm:px-6 md:px-10">
         <div class="max-w-[1440px] mx-auto">
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 mb-8 sm:mb-12">
@@ -342,227 +267,326 @@
         </div>
     </footer>
 
-    <script>
-        // [Script remains the same - update createCard function card sizes]
-        const VIDSRC_API = 'https://vidsrc-embed.ru';
+    <script type="text/javascript">
+        const VIDSRC_API = 'https://vsembed.ru';
         const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
         const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
         const CACHE_DURATION = 3600000;
 
         const cache = {
-          data: {},
-          get(key) {
-            const item = this.data[key];
-            if (!item) return null;
-            if (Date.now() - item.timestamp > CACHE_DURATION) {
-              delete this.data[key];
-              return null;
+            data: {},
+            get(key) {
+                const item = this.data[key];
+                if (!item) return null;
+                if (Date.now() - item.timestamp > CACHE_DURATION) {
+                    delete this.data[key];
+                    return null;
+                }
+                return item.value;
+            },
+            set(key, value) {
+                this.data[key] = { value, timestamp: Date.now() };
+            },
+            clear() {
+                this.data = {};
             }
-            return item.value;
-          },
-          set(key, value) {
-            this.data[key] = { value, timestamp: Date.now() };
-          },
-          clear() {
-            this.data = {};
-          }
         };
 
-        async function fetchFromTMDB(path) {
-          const cacheKey = `tmdb_${path}`;
-          const cached = cache.get(cacheKey);
-          if (cached) return cached;
+        const myListStorage = {
+            getAll() {
+                try {
+                    const items = localStorage.getItem('streamcinema_mylist');
+                    return items ? JSON.parse(items) : [];
+                } catch (err) {
+                    console.error('Error reading from localStorage:', err);
+                    return [];
+                }
+            },
+            add(tmdbId, title, type) {
+                try {
+                    const items = this.getAll();
+                    const exists = items.some(item => item.tmdb_id === tmdbId);
+                    if (!exists) {
+                        items.push({ tmdb_id: tmdbId, title: title, type: type, added: Date.now() });
+                        localStorage.setItem('streamcinema_mylist', JSON.stringify(items));
+                        return true;
+                    }
+                    return false;
+                } catch (err) {
+                    console.error('Error writing to localStorage:', err);
+                    return false;
+                }
+            },
+            remove(tmdbId) {
+                try {
+                    const items = this.getAll();
+                    const filtered = items.filter(item => item.tmdb_id !== tmdbId);
+                    localStorage.setItem('streamcinema_mylist', JSON.stringify(filtered));
+                } catch (err) {
+                    console.error('Error removing from localStorage:', err);
+                }
+            },
+            clear() {
+                try {
+                    localStorage.removeItem('streamcinema_mylist');
+                } catch (err) {
+                    console.error('Error clearing localStorage:', err);
+                }
+            }
+        };
 
-          const url = `https://api.themoviedb.org/3${path}?api_key=${TMDB_API_KEY}`;
-          try {
-            const res = await fetch(url);
-            const data = res.ok ? await res.json() : null;
-            if (data) cache.set(cacheKey, data);
-            return data;
-          } catch (err) {
-            console.warn('TMDB fetch failed:', err);
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-6 right-6 bg-${type === 'success' ? 'primary' : 'red-500'} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-up flex items-center gap-2`;
+            const icon = document.createElement('span');
+            icon.className = 'material-symbols-outlined text-sm';
+            icon.textContent = type === 'success' ? 'check_circle' : 'info';
+            const text = document.createElement('span');
+            text.textContent = message;
+            notification.appendChild(icon);
+            notification.appendChild(text);
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s';
+                setTimeout(() => notification.remove(), 300);
+            }, 2500);
+        }
+
+        function addToMyList(tmdbId, title, type) {
+            const added = myListStorage.add(tmdbId, title, type);
+            if (added) {
+                console.log(`Added to My List: ${title}`);
+                showNotification(`Added "${title}" to My List`);
+            } else {
+                console.log(`${title} is already in My List.`);
+                showNotification(`"${title}" is already in your list`, 'info');
+            }
+        }
+
+        async function fetchAnimeFromAnidb(limit = 12) {
+            try {
+                const res = await fetch("https://api.jikan.moe/v4/top/anime");
+                const json = await res.json();
+                const resolved = [];
+                for (const anime of json.data) {
+                    const tmdb = await resolveTMDBFromAnime(anime);
+                    if (tmdb) {
+                        resolved.push({tmdb_id: tmdb.id, title: anime.title, type: tmdb.media_type});
+                    }
+                }
+                return resolved;
+            } catch (e) {
+                console.warn("Anime fetch failed", e);
+                return [];
+            }
+        }
+
+        async function resolveTMDBFromAnime(anime) {
+            const titles = [anime.title, anime.title_english, anime.title_japanese, ...(anime.titles?.map(t => t.title) || [])].filter(Boolean);
+            const cleaned = titles.map(t => t.replace(/[\[\]\(\):\-–!]/g, "").trim());
+            const searchVariants = [...new Set([...titles, ...cleaned])];
+            for (const title of searchVariants) {
+                let res = await tmdbSearch(title, anime.year, anime.type);
+                if (res) return res;
+                res = await tmdbSearch(title, null, anime.type);
+                if (res) return res;
+                res = await tmdbMultiSearch(title);
+                if (res) return res;
+            }
             return null;
-          }
+        }
+
+        async function tmdbSearch(title, year, type) {
+            const media = type === "Movie" ? "movie" : "tv";
+            const q = encodeURIComponent(title);
+            const y = year ? `&year=${year}` : "";
+            const url = `https://api.themoviedb.org/3/search/${media}?query=${q}${y}&api_key=${TMDB_API_KEY}`;
+            try {
+                const res = await fetch(url);
+                if (!res.ok) return null;
+                const json = await res.json();
+                return json.results?.[0] || null;
+            } catch {
+                return null;
+            }
+        }
+
+        async function tmdbMultiSearch(title) {
+            const q = encodeURIComponent(title);
+            const url = `https://api.themoviedb.org/3/search/multi?query=${q}&api_key=${TMDB_API_KEY}`;
+            try {
+                const res = await fetch(url);
+                if (!res.ok) return null;
+                const json = await res.json();
+                return json.results?.find(r => r.media_type === "movie" || r.media_type === "tv") || null;
+            } catch {
+                return null;
+            }
+        }
+
+        async function fetchFromTMDB(path) {
+            const cacheKey = `tmdb_${path}`;
+            const cached = cache.get(cacheKey);
+            if (cached) return cached;
+            const url = `https://api.themoviedb.org/3${path}?api_key=${TMDB_API_KEY}`;
+            try {
+                const res = await fetch(url);
+                const data = res.ok ? await res.json() : null;
+                if (data) cache.set(cacheKey, data);
+                return data;
+            } catch (err) {
+                console.warn('TMDB fetch failed:', err);
+                return null;
+            }
         }
 
         async function getPoster(tmdbId, type) {
-          const data = await fetchFromTMDB(`/${type}/${tmdbId}`);
-          if (data?.poster_path) {
-            return TMDB_IMG_BASE + data.poster_path;
-          }
-          return 'https://via.placeholder.com/160x240?text=No+Poster';
+            const data = await fetchFromTMDB(`/${type}/${tmdbId}`);
+            if (data?.poster_path) {
+                return TMDB_IMG_BASE + data.poster_path;
+            }
+            return 'https://via.placeholder.com/160x240?text=No+Poster';
         }
 
         async function fetchItemsUntilLimit(endpoint, limit = 12) {
-          let items = [];
-          let page = 1;
-
-          while (items.length < limit && page <= 5) {
-            try {
-              const res = await fetch(`${VIDSRC_API}${endpoint}/page-${page}.json`);
-              if (!res.ok) break;
-
-              const json = await res.json();
-              const results = json.result || [];
-
-              if (results.length === 0) break;
-
-              const validItems = results.filter(item => item.tmdb_id);
-              items = [...items, ...validItems];
-
-              page++;
-            } catch (err) {
-              console.warn(`Fetch failed at page ${page}:`, err);
-              break;
+            let items = [];
+            let page = 1;
+            while (items.length < limit && page <= 5) {
+                try {
+                    const res = await fetch(`${VIDSRC_API}${endpoint}/page-${page}.json`);
+                    if (!res.ok) break;
+                    const json = await res.json();
+                    const results = json.result || [];
+                    if (results.length === 0) break;
+                    const validItems = results.filter(item => item.tmdb_id);
+                    items = [...items, ...validItems];
+                    page++;
+                } catch (err) {
+                    console.warn(`Fetch failed at page ${page}:`, err);
+                    break;
+                }
             }
-          }
-
-          return items.slice(0, limit);
+            return items.slice(0, limit);
         }
 
         function createCard(item, type) {
-          const card = document.createElement('div');
-          card.className = 'group flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px] cursor-pointer transition-all duration-300';
-
-          const handleClick = () => {
-            if (type === 'movie') {
-                localStorage.setItem('currentMovieId', item.tmdb_id);
-                localStorage.setItem('currentMovieName', item.title || 'Untitled');
-                window.location.href = 'movie.html';
-            } else if (type === 'tv') {
-                localStorage.setItem('currentTVShowId', item.tmdb_id);
-                localStorage.setItem('currentTVShowName', item.title || 'Untitled');
-                window.location.href = 'series.html';
-            }
-          };
-
-          const imgContainer = document.createElement('div');
-          imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-lg sm:rounded-xl';
-
-          const img = document.createElement('img');
-          img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110';
-          img.alt = item.title || 'Untitled';
-          img.loading = 'lazy';
-          img.src = 'https://via.placeholder.com/160x240?text=Loading...';
-
-          setTimeout(async () => {
-            const posterUrl = await getPoster(item.tmdb_id, type);
-            img.src = posterUrl;
-          }, 100);
-
-          const overlay = document.createElement('div');
-          overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 sm:p-4';
-          const buttonGroup = document.createElement('div');
-          buttonGroup.className = 'flex gap-2';
-          const playButton = document.createElement('button');
-          playButton.className = 'bg-primary rounded-full p-1.5 sm:p-2 text-white';
-          playButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">play_arrow</span>';
-          playButton.onclick = (e) => { e.stopPropagation(); handleClick(); };
-          const listButton = document.createElement('button');
-          listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-1.5 sm:p-2 text-white';
-          listButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">add</span>';
-          buttonGroup.appendChild(playButton);
-          buttonGroup.appendChild(listButton);
-          overlay.appendChild(buttonGroup);
-
-          imgContainer.appendChild(img);
-          imgContainer.appendChild(overlay);
-
-          const titleEl = document.createElement('div');
-          titleEl.className = 'flex flex-col gap-1';
-          const titleText = document.createElement('p');
-          titleText.className = 'text-white text-xs sm:text-sm font-bold leading-none truncate';
-          titleText.textContent = (item.title || 'Untitled').substring(0, 25);
-          const metaInfo = document.createElement('p');
-          metaInfo.className = 'text-white/50 text-[10px] sm:text-xs';
-          metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`;
-          titleEl.appendChild(titleText);
-          titleEl.appendChild(metaInfo);
-
-          card.addEventListener('click', handleClick);
-          card.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              handleClick();
-            }
-          });
-
-          card.appendChild(imgContainer);
-          card.appendChild(titleEl);
-          return card;
+            const card = document.createElement('div');
+            card.className = 'group flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px] cursor-pointer transition-all duration-300';
+            const handleClick = () => {
+                if (type === 'movie') {
+                    localStorage.setItem('currentMovieId', item.tmdb_id);
+                    localStorage.setItem('currentMovieName', item.title || 'Untitled');
+                    window.location.href = 'movie.html';
+                } else if (type === 'tv') {
+                    localStorage.setItem('currentTVShowId', item.tmdb_id);
+                    localStorage.setItem('currentTVShowName', item.title || 'Untitled');
+                    window.location.href = 'series.html';
+                }
+            };
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-lg sm:rounded-xl';
+            const img = document.createElement('img');
+            img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110';
+            img.alt = item.title || 'Untitled';
+            img.loading = 'lazy';
+            img.src = 'https://via.placeholder.com/160x240?text=Loading...';
+            setTimeout(async () => {
+                const posterUrl = await getPoster(item.tmdb_id, type);
+                img.src = posterUrl;
+            }, 100);
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 sm:p-4';
+            const buttonGroup = document.createElement('div');
+            buttonGroup.className = 'flex gap-2';
+            const playButton = document.createElement('button');
+            playButton.className = 'bg-primary rounded-full p-1.5 sm:p-2 text-white hover:scale-110 transition-transform';
+            playButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">play_arrow</span>';
+            playButton.onclick = (e) => { e.stopPropagation(); handleClick(); };
+            const listButton = document.createElement('button');
+            listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-1.5 sm:p-2 text-white hover:bg-white/30 transition-all';
+            listButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">add</span>';
+            listButton.onclick = (e) => {
+                e.stopPropagation();
+                addToMyList(item.tmdb_id, item.title, type);
+            };
+            buttonGroup.appendChild(playButton);
+            buttonGroup.appendChild(listButton);
+            overlay.appendChild(buttonGroup);
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(overlay);
+            const titleEl = document.createElement('div');
+            titleEl.className = 'flex flex-col gap-1';
+            const titleText = document.createElement('p');
+            titleText.className = 'text-white text-xs sm:text-sm font-bold leading-none truncate';
+            titleText.textContent = (item.title || 'Untitled').substring(0, 25);
+            const metaInfo = document.createElement('p');
+            metaInfo.className = 'text-white/50 text-[10px] sm:text-xs';
+            metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`;
+            titleEl.appendChild(titleText);
+            titleEl.appendChild(metaInfo);
+            card.addEventListener('click', handleClick);
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleClick();
+                }
+            });
+            card.appendChild(imgContainer);
+            card.appendChild(titleEl);
+            return card;
         }
 
         async function searchMedia(query) {
-          if (!query.trim()) return [];
-
-          const cacheKey = `search_${query.toLowerCase()}`;
-          const cached = cache.get(cacheKey);
-          if (cached) return cached;
-
-          const encodedQuery = encodeURIComponent(query);
-          const url = `https://api.themoviedb.org/3/search/multi?query=${encodedQuery}&api_key=${TMDB_API_KEY}&include_adult=false`;
-
-          try {
-            const res = await fetch(url);
-            if (!res.ok) return [];
-            const data = await res.json();
-
-            const results = data.results
-              .filter(item =>
-                (item.media_type === 'movie' || item.media_type === 'tv') &&
-                item.id &&
-                item.poster_path
-              )
-              .map(item => ({
-                tmdb_id: item.id,
-                title: item.title || item.name || 'Untitled',
-                type: item.media_type,
-                poster_path: item.poster_path,
-                release_date: item.release_date || item.first_air_date
-              }));
-            
-            cache.set(cacheKey, results);
-            return results;
-          } catch (err) {
-            console.error('Search failed:', err);
-            return [];
-          }
+            if (!query.trim()) return [];
+            const cacheKey = `search_${query.toLowerCase()}`;
+            const cached = cache.get(cacheKey);
+            if (cached) return cached;
+            const encodedQuery = encodeURIComponent(query);
+            const url = `https://api.themoviedb.org/3/search/multi?query=${encodedQuery}&api_key=${TMDB_API_KEY}&include_adult=false`;
+            try {
+                const res = await fetch(url);
+                if (!res.ok) return [];
+                const data = await res.json();
+                const results = data.results.filter(item => (item.media_type === 'movie' || item.media_type === 'tv') && item.id && item.poster_path).map(item => ({
+                    tmdb_id: item.id,
+                    title: item.title || item.name || 'Untitled',
+                    type: item.media_type,
+                    poster_path: item.poster_path,
+                    release_date: item.release_date || item.first_air_date
+                }));
+                cache.set(cacheKey, results);
+                return results;
+            } catch (err) {
+                console.error('Search failed:', err);
+                return [];
+            }
         }
 
         function displaySearchResults(results) {
             const searchSection = document.getElementById('search-results-section');
             const container = document.getElementById('search-results');
-            if (!searchSection || !container) {
-                console.error("Search result containers not found in HTML.");
-                return;
-            }
-
+            if (!searchSection || !container) return;
             searchSection.classList.remove('hidden');
             document.getElementById('movies-section').classList.add('hidden');
             document.getElementById('series-section').classList.add('hidden');
             document.getElementById('anime-section').classList.add('hidden');
-
             container.innerHTML = '';
-            container.appendChild(document.createElement('div')).className = 'flex items-stretch gap-3 sm:gap-4 md:gap-6';
-
+            const resultsWrapper = document.createElement('div');
+            resultsWrapper.className = 'flex items-stretch gap-3 sm:gap-4 md:gap-6';
+            container.appendChild(resultsWrapper);
             results.slice(0, 12).forEach(item => {
-                const card = createCard({
-                    tmdb_id: item.tmdb_id,
-                    title: item.title
-                }, item.type);
-                
-                const parentDiv = container.firstChild;
-                parentDiv.appendChild(card);
+                const card = createCard({tmdb_id: item.tmdb_id, title: item.title}, item.type);
+                resultsWrapper.appendChild(card);
             });
         }
 
         document.getElementById('searchForm')?.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const query = e.target.querySelector('input').value.trim();
-          if (!query) return;
-
-          const results = await searchMedia(query);
-          displaySearchResults(results);
+            e.preventDefault();
+            const query = e.target.querySelector('input').value.trim();
+            if (!query) return;
+            const results = await searchMedia(query);
+            displaySearchResults(results);
         });
 
         document.getElementById('searchInputNavbar')?.addEventListener('keypress', async (e) => {
@@ -570,7 +594,6 @@
                 e.preventDefault();
                 const query = e.target.value.trim();
                 if (!query) return;
-
                 const results = await searchMedia(query);
                 displaySearchResults(results);
             }
@@ -580,7 +603,6 @@
             e.stopPropagation();
             const searchForm = document.getElementById('searchForm');
             const queryInput = document.getElementById('searchInputNavbar');
-            
             if (!searchForm.classList.contains('mobile-visible')) {
                 searchForm.classList.add('mobile-visible');
                 queryInput?.focus();
@@ -603,43 +625,36 @@
         });
 
         async function init() {
-          const moviesGrid = document.getElementById('movies-grid');
-          const seriesGrid = document.getElementById('series-grid');
-          const animeGrid = document.getElementById('anime-grid');
-
-          if (!moviesGrid || !seriesGrid || !animeGrid) {
-            console.error('DOM containers missing');
-            return;
-          }
-
-          try {
-            const movies = await fetchItemsUntilLimit('/movies/latest', 12);
-            const tvShows = await fetchItemsUntilLimit('/tvshows/latest', 12);
-
-            const series = tvShows.slice(0, 6);
-            const anime = tvShows.slice(6, 12);
-
-            moviesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
-            const moviesParent = moviesGrid.firstChild;
-            movies.forEach(m => moviesParent.appendChild(createCard(m, 'movie')));
-
-            seriesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
-            const seriesParent = seriesGrid.firstChild;
-            series.forEach(s => seriesParent.appendChild(createCard(s, 'tv')));
-
-            animeGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
-            const animeParent = animeGrid.firstChild;
-            anime.forEach(a => animeParent.appendChild(createCard(a, 'tv')));
-
-          } catch (err) {
-            console.error('App init failed:', err);
-          }
+            const moviesGrid = document.getElementById('movies-grid');
+            const seriesGrid = document.getElementById('series-grid');
+            const animeGrid = document.getElementById('anime-grid');
+            if (!moviesGrid || !seriesGrid || !animeGrid) {
+                console.error('DOM containers missing');
+                return;
+            }
+            try {
+                const movies = await fetchItemsUntilLimit('/movies/latest', 12);
+                const tvShows = await fetchItemsUntilLimit('/tvshows/latest', 12);
+                const series = tvShows.slice(0, 12);
+                const anime = await fetchAnimeFromAnidb(6);
+                moviesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+                const moviesParent = moviesGrid.firstChild;
+                movies.forEach(m => moviesParent.appendChild(createCard(m, 'movie')));
+                seriesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+                const seriesParent = seriesGrid.firstChild;
+                series.forEach(s => seriesParent.appendChild(createCard(s, 'tv')));
+                animeGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+                const animeParent = animeGrid.firstChild;
+                anime.forEach(a => animeParent.appendChild(createCard(a, 'tv')));
+            } catch (err) {
+                console.error('App init failed:', err);
+            }
         }
 
         if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', init);
+            document.addEventListener('DOMContentLoaded', init);
         } else {
-          init();
+            init();
         }
     </script>
 </body>

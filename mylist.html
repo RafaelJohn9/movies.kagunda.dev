@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="referrer" content="origin" />
+    <title>My List - StreamCinema</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec13a4",
+                        "background-light": "#f8f6f7",
+                        "background-dark": "#0a0508",
+                        "surface-dark": "#22101c",
+                    },
+                    fontFamily: {
+                        "display": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white font-display">
+    <header class="fixed top-0 z-50 w-full bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-3 sm:px-4 md:px-10 py-3">
+        <div class="max-w-[1440px] mx-auto flex items-center justify-between whitespace-nowrap gap-4">
+            <div class="flex items-center gap-3 sm:gap-8 min-w-0">
+                <a href="index.html" class="flex items-center gap-1.5 sm:gap-2 text-primary flex-shrink-0">
+                    <div class="size-6 sm:size-8">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-white text-sm sm:text-xl font-black leading-tight tracking-[-0.015em] hidden sm:inline">STREAM<span class="text-primary">CINEMA</span></h2>
+                    <h2 class="text-white text-xs font-black sm:hidden">SC</h2>
+                </a>
+                <nav class="hidden lg:flex items-center gap-4 xl:gap-6">
+                    <a class="text-white/60 hover:text-primary transition-colors text-sm font-medium leading-normal" href="index.html">Movies</a>
+                    <a class="text-white/60 hover:text-primary transition-colors text-sm font-medium leading-normal" href="index.html">Series</a>
+                    <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="mylist.html">My List</a>
+                    <a class="text-white/60 hover:text-white transition-colors text-sm font-medium leading-normal" href="index.html">New & Popular</a>
+                </nav>
+            </div>
+            <div class="flex flex-1 justify-end items-center gap-2 sm:gap-4 min-w-0">
+                <a href="index.html" class="text-white/60 hover:text-white transition-colors p-2">
+                    <span class="material-symbols-outlined text-lg sm:text-xl">home</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative w-full h-[40vh] min-h-[300px] pt-16 @container">
+        <div class="absolute inset-0 bg-gradient-to-b from-primary/20 via-background-dark to-background-dark"></div>
+        <div class="relative h-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 flex flex-col justify-center items-start gap-3 sm:gap-4">
+            <div class="flex flex-col gap-2 sm:gap-3 max-w-2xl">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-3xl sm:text-4xl">favorite</span>
+                    <h1 class="text-white text-3xl sm:text-5xl md:text-6xl font-black leading-tight tracking-[-0.033em] uppercase">My List</h1>
+                </div>
+                <p class="text-white/80 text-sm sm:text-base leading-relaxed">
+                    Your personally curated collection of movies and series. <span id="list-count" class="text-primary font-bold">0 items</span> saved.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <main class="relative z-10 pb-20 space-y-8 sm:space-y-12">
+        <section class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10 mt-8">
+            <div class="flex items-center justify-between mb-4 gap-2">
+                <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2">
+                    Saved Items
+                    <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">collections_bookmark</span>
+                </h2>
+                <button id="clear-all-btn" class="text-white/60 hover:text-primary transition-colors text-xs sm:text-sm font-medium flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm sm:text-base">delete_sweep</span>
+                    <span>Clear All</span>
+                </button>
+            </div>
+            
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-16 sm:py-24 text-center">
+                <div class="w-24 h-24 sm:w-32 sm:h-32 mb-6 text-white/20">
+                    <span class="material-symbols-outlined" style="font-size: 6rem;">bookmark_border</span>
+                </div>
+                <h3 class="text-white text-xl sm:text-2xl font-bold mb-2">Your list is empty</h3>
+                <p class="text-white/60 text-sm sm:text-base mb-6 max-w-md">
+                    Start adding movies and series you love to build your personal collection!
+                </p>
+                <a href="index.html" class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-lg hover:opacity-90 transition-opacity">
+                    <span class="material-symbols-outlined">explore</span>
+                    <span>Browse Content</span>
+                </a>
+            </div>
+
+            <div id="list-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6"></div>
+        </section>
+    </main>
+
+    <footer class="bg-black/40 border-t border-white/5 py-8 sm:py-12 px-3 sm:px-6 md:px-10">
+        <div class="max-w-[1440px] mx-auto">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 mb-8 sm:mb-12">
+                <div class="col-span-2 sm:col-span-3 lg:col-span-1">
+                    <div class="flex items-center gap-1.5 sm:gap-2 text-primary mb-4 sm:mb-6">
+                        <div class="size-5 sm:size-6">
+                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-white text-sm sm:text-lg font-black tracking-tight uppercase">STREAMCINEMA</h2>
+                    </div>
+                    <p class="text-white/50 text-xs sm:text-sm leading-relaxed">Global storytelling. Original series, blockbusters, and documentaries.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Explore</h4>
+                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
+                        <li><a class="hover:text-primary" href="index.html">Movies</a></li>
+                        <li><a class="hover:text-primary" href="index.html">TV Series</a></li>
+                        <li><a class="hover:text-primary" href="index.html">Documentaries</a></li>
+                        <li><a class="hover:text-primary" href="index.html">Originals</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Support</h4>
+                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
+                        <li><a class="hover:text-primary" href="#">Help Center</a></li>
+                        <li><a class="hover:text-primary" href="#">Contact Us</a></li>
+                        <li><a class="hover:text-primary" href="#">Account</a></li>
+                        <li><a class="hover:text-primary" href="#">Devices</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Legal</h4>
+                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
+                        <li><a class="hover:text-primary" href="#">Terms of Service</a></li>
+                        <li><a class="hover:text-primary" href="#">Privacy Policy</a></li>
+                        <li><a class="hover:text-primary" href="#">Cookie Prefs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-6 sm:pt-8 border-t border-white/5 text-center sm:text-left text-white/30 text-xs">
+                © 2024 StreamCinema. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
+        const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
+        const CACHE_DURATION = 3600000;
+
+        const cache = {
+            data: {},
+            get(key) {
+                const item = this.data[key];
+                if (!item) return null;
+                if (Date.now() - item.timestamp > CACHE_DURATION) {
+                    delete this.data[key];
+                    return null;
+                }
+                return item.value;
+            },
+            set(key, value) {
+                this.data[key] = { value, timestamp: Date.now() };
+            },
+            clear() {
+                this.data = {};
+            }
+        };
+
+        async function fetchFromTMDB(path) {
+            const cacheKey = `tmdb_${path}`;
+            const cached = cache.get(cacheKey);
+            if (cached) return cached;
+            const url = `https://api.themoviedb.org/3${path}?api_key=${TMDB_API_KEY}`;
+            try {
+                const res = await fetch(url);
+                const data = res.ok ? await res.json() : null;
+                if (data) cache.set(cacheKey, data);
+                return data;
+            } catch (err) {
+                console.warn('TMDB fetch failed:', err);
+                return null;
+            }
+        }
+
+        async function getPoster(tmdbId, type) {
+            const data = await fetchFromTMDB(`/${type}/${tmdbId}`);
+            if (data?.poster_path) {
+                return TMDB_IMG_BASE + data.poster_path;
+            }
+            return 'https://via.placeholder.com/300x450?text=No+Poster';
+        }
+
+        function createListCard(item, type) {
+            const card = document.createElement('div');
+            card.className = 'group flex flex-col gap-2 cursor-pointer transition-all duration-300';
+            const handleClick = () => {
+                if (type === 'movie') {
+                    localStorage.setItem('currentMovieId', item.tmdb_id);
+                    localStorage.setItem('currentMovieName', item.title || 'Untitled');
+                    window.location.href = 'movie.html';
+                } else if (type === 'tv') {
+                    localStorage.setItem('currentTVShowId', item.tmdb_id);
+                    localStorage.setItem('currentTVShowName', item.title || 'Untitled');
+                    window.location.href = 'series.html';
+                }
+            };
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-lg sm:rounded-xl';
+            const img = document.createElement('img');
+            img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110';
+            img.alt = item.title || 'Untitled';
+            img.loading = 'lazy';
+            img.src = 'https://via.placeholder.com/300x450?text=Loading...';
+            setTimeout(async () => {
+                const posterUrl = await getPoster(item.tmdb_id, type);
+                img.src = posterUrl;
+            }, 100);
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 sm:p-4';
+            const buttonGroup = document.createElement('div');
+            buttonGroup.className = 'flex gap-2';
+            const playButton = document.createElement('button');
+            playButton.className = 'bg-primary rounded-full p-1.5 sm:p-2 text-white';
+            playButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">play_arrow</span>';
+            playButton.onclick = (e) => { e.stopPropagation(); handleClick(); };
+            const removeButton = document.createElement('button');
+            removeButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-1.5 sm:p-2 text-white hover:bg-red-500/80 transition-colors';
+            removeButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">close</span>';
+            removeButton.onclick = (e) => { 
+                e.stopPropagation(); 
+                removeFromList(item.tmdb_id);
+            };
+            buttonGroup.appendChild(playButton);
+            buttonGroup.appendChild(removeButton);
+            overlay.appendChild(buttonGroup);
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(overlay);
+            const titleEl = document.createElement('div');
+            titleEl.className = 'flex flex-col gap-1';
+            const titleText = document.createElement('p');
+            titleText.className = 'text-white text-xs sm:text-sm font-bold leading-none truncate';
+            titleText.textContent = (item.title || 'Untitled').substring(0, 25);
+            const metaInfo = document.createElement('p');
+            metaInfo.className = 'text-white/50 text-[10px] sm:text-xs';
+            metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • Saved`;
+            titleEl.appendChild(titleText);
+            titleEl.appendChild(metaInfo);
+            card.addEventListener('click', handleClick);
+            card.appendChild(imgContainer);
+            card.appendChild(titleEl);
+            return card;
+        }
+
+        function getAllMyListItems() {
+            try {
+                const items = localStorage.getItem('streamcinema_mylist');
+                return items ? JSON.parse(items) : [];
+            } catch (err) {
+                console.error('Error reading My List:', err);
+                return [];
+            }
+        }
+
+        function removeFromList(tmdbId) {
+            try {
+                const items = getAllMyListItems();
+                const filtered = items.filter(item => item.tmdb_id !== tmdbId);
+                localStorage.setItem('streamcinema_mylist', JSON.stringify(filtered));
+                console.log(`Removed item ${tmdbId} from list`);
+                displayList();
+            } catch (err) {
+                console.error('Error removing item:', err);
+            }
+        }
+
+        function clearAllItems() {
+            if (confirm('Are you sure you want to clear your entire list?')) {
+                try {
+                    localStorage.removeItem('streamcinema_mylist');
+                    console.log('Cleared all list items');
+                    displayList();
+                } catch (err) {
+                    console.error('Error clearing list:', err);
+                }
+            }
+        }
+
+        async function displayList() {
+            const listGrid = document.getElementById('list-grid');
+            const emptyState = document.getElementById('empty-state');
+            const listCount = document.getElementById('list-count');
+            
+            if (!listGrid || !emptyState || !listCount) return;
+
+            const items = getAllMyListItems();
+            
+            listCount.textContent = `${items.length} ${items.length === 1 ? 'item' : 'items'}`;
+
+            if (items.length === 0) {
+                listGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            listGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+            listGrid.innerHTML = '';
+
+            for (const item of items) {
+                const card = createListCard(item, item.type);
+                listGrid.appendChild(card);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayList();
+            const clearAllBtn = document.getElementById('clear-all-btn');
+            if (clearAllBtn) {
+                clearAllBtn.addEventListener('click', clearAllItems);
+            }
+        });
+    </script>
+</body>
+</html>

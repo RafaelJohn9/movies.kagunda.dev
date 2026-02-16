@@ -1,15 +1,11 @@
-// api.js — Robust, clean, and fetches up to 12 items per category with caching
-
-// 🔧 CONFIG (no trailing spaces!)
-const VIDSRC_API = 'https://vidsrc.in';
+ // [Script remains the same - update createCard function card sizes]
+const VIDSRC_API = 'https://vidsrc.net';
 const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
 const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
-const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+const CACHE_DURATION = 3600000;
 
-// 💾 Simple cache manager
 const cache = {
   data: {},
-  
   get(key) {
     const item = this.data[key];
     if (!item) return null;
@@ -19,17 +15,14 @@ const cache = {
     }
     return item.value;
   },
-  
   set(key, value) {
     this.data[key] = { value, timestamp: Date.now() };
   },
-  
   clear() {
     this.data = {};
   }
 };
 
-// 📡 Fetch from TMDB safely with caching
 async function fetchFromTMDB(path) {
   const cacheKey = `tmdb_${path}`;
   const cached = cache.get(cacheKey);
@@ -47,7 +40,6 @@ async function fetchFromTMDB(path) {
   }
 }
 
-// 🖼️ Get poster URL
 async function getPoster(tmdbId, type) {
   const data = await fetchFromTMDB(`/${type}/${tmdbId}`);
   if (data?.poster_path) {
@@ -56,7 +48,6 @@ async function getPoster(tmdbId, type) {
   return 'https://via.placeholder.com/160x240?text=No+Poster';
 }
 
-// 🎬 Fetch latest movies until we have 12 valid items
 async function fetchItemsUntilLimit(endpoint, limit = 12) {
   let items = [];
   let page = 1;
@@ -84,17 +75,15 @@ async function fetchItemsUntilLimit(endpoint, limit = 12) {
   return items.slice(0, limit);
 }
 
-// 1. Updated createCard function to match new design
 function createCard(item, type) {
   const card = document.createElement('div');
-  card.className = 'group flex flex-col gap-3 min-w-[140px] sm:min-w-[160px] md:min-w-[200px] cursor-pointer transition-all duration-300'; // Match StreamCinema card sizes
+  card.className = 'group flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px] cursor-pointer transition-all duration-300';
 
   const handleClick = () => {
     if (type === 'movie') {
-        // Store movie info for iframe page
         localStorage.setItem('currentMovieId', item.tmdb_id);
         localStorage.setItem('currentMovieName', item.title || 'Untitled');
-        window.location.href = 'movie.html'; // go to movie page with iframe
+        window.location.href = 'movie.html';
     } else if (type === 'tv') {
         localStorage.setItem('currentTVShowId', item.tmdb_id);
         localStorage.setItem('currentTVShowName', item.title || 'Untitled');
@@ -103,26 +92,30 @@ function createCard(item, type) {
   };
 
   const imgContainer = document.createElement('div');
-  imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-xl'; // Maintain aspect ratio
+  imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-lg sm:rounded-xl';
 
   const img = document.createElement('img');
-  img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'; // Smooth zoom effect
+  img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110';
   img.alt = item.title || 'Untitled';
   img.loading = 'lazy';
   img.src = 'https://via.placeholder.com/160x240?text=Loading...';
 
-  // Overlay buttons container (appears on hover)
+  setTimeout(async () => {
+    const posterUrl = await getPoster(item.tmdb_id, type);
+    img.src = posterUrl;
+  }, 100);
+
   const overlay = document.createElement('div');
-  overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4';
+  overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 sm:p-4';
   const buttonGroup = document.createElement('div');
   buttonGroup.className = 'flex gap-2';
   const playButton = document.createElement('button');
-  playButton.className = 'bg-primary rounded-full p-2 text-white';
-  playButton.innerHTML = '<span class="material-symbols-outlined text-sm">play_arrow</span>';
-  playButton.onclick = (e) => { e.stopPropagation(); handleClick(); }; // Prevent card click propagation
+  playButton.className = 'bg-primary rounded-full p-1.5 sm:p-2 text-white';
+  playButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">play_arrow</span>';
+  playButton.onclick = (e) => { e.stopPropagation(); handleClick(); };
   const listButton = document.createElement('button');
-  listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-2 text-white';
-  listButton.innerHTML = '<span class="material-symbols-outlined text-sm">add</span>';
+  listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-1.5 sm:p-2 text-white';
+  listButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">add</span>';
   buttonGroup.appendChild(playButton);
   buttonGroup.appendChild(listButton);
   overlay.appendChild(buttonGroup);
@@ -131,14 +124,13 @@ function createCard(item, type) {
   imgContainer.appendChild(overlay);
 
   const titleEl = document.createElement('div');
-  titleEl.className = 'flex flex-col';
+  titleEl.className = 'flex flex-col gap-1';
   const titleText = document.createElement('p');
-  titleText.className = 'text-white text-sm md:text-base font-bold leading-none truncate'; // Smaller base font size
-  titleText.textContent = (item.title || 'Untitled').substring(0, 30);
+  titleText.className = 'text-white text-xs sm:text-sm font-bold leading-none truncate';
+  titleText.textContent = (item.title || 'Untitled').substring(0, 25);
   const metaInfo = document.createElement('p');
-  metaInfo.className = 'text-white/50 text-xs mt-1';
-  // Basic meta-info placeholder - could be enhanced with release date
-  metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`; 
+  metaInfo.className = 'text-white/50 text-[10px] sm:text-xs';
+  metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`;
   titleEl.appendChild(titleText);
   titleEl.appendChild(metaInfo);
 
@@ -155,7 +147,6 @@ function createCard(item, type) {
   return card;
 }
 
-// Search movies & TV shows by query with caching
 async function searchMedia(query) {
   if (!query.trim()) return [];
 
@@ -193,7 +184,6 @@ async function searchMedia(query) {
   }
 }
 
-// 2. Updated displaySearchResults function to work with new layout
 function displaySearchResults(results) {
     const searchSection = document.getElementById('search-results-section');
     const container = document.getElementById('search-results');
@@ -202,36 +192,34 @@ function displaySearchResults(results) {
         return;
     }
 
-    // Show the search section
     searchSection.classList.remove('hidden');
-    // Hide other sections
     document.getElementById('movies-section').classList.add('hidden');
     document.getElementById('series-section').classList.add('hidden');
     document.getElementById('anime-section').classList.add('hidden');
 
-    // Clear previous results
     container.innerHTML = '';
+    container.appendChild(document.createElement('div')).className = 'flex items-stretch gap-3 sm:gap-4 md:gap-6';
 
     results.slice(0, 12).forEach(item => {
         const card = createCard({
             tmdb_id: item.tmdb_id,
             title: item.title
         }, item.type);
-        container.appendChild(card);
+        
+        const parentDiv = container.firstChild;
+        parentDiv.appendChild(card);
     });
 }
 
-// 3. Updated search form handling for new inputs
 document.getElementById('searchForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const query = e.target.querySelector('.search-input').value.trim();
+  const query = e.target.querySelector('input').value.trim();
   if (!query) return;
 
   const results = await searchMedia(query);
   displaySearchResults(results);
 });
 
-// Handle new search inputs from the header
 document.getElementById('searchInputNavbar')?.addEventListener('keypress', async (e) => {
     if (e.key === 'Enter') {
         e.preventDefault();
@@ -242,18 +230,33 @@ document.getElementById('searchInputNavbar')?.addEventListener('keypress', async
         displaySearchResults(results);
     }
 });
-// Optional: Add search button click handler if needed
-document.getElementById('mobileSearchBtn')?.addEventListener('click', async () => {
-    const queryInput = document.getElementById('searchInputNavbar');
-    const query = queryInput?.value.trim();
-    if (!query) return;
 
-    const results = await searchMedia(query);
-    displaySearchResults(results);
+document.getElementById('mobileSearchBtn')?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const searchForm = document.getElementById('searchForm');
+    const queryInput = document.getElementById('searchInputNavbar');
+    
+    if (!searchForm.classList.contains('mobile-visible')) {
+        searchForm.classList.add('mobile-visible');
+        queryInput?.focus();
+    } else {
+        const query = queryInput?.value.trim();
+        if (query) {
+            const results = await searchMedia(query);
+            displaySearchResults(results);
+        }
+        searchForm.classList.remove('mobile-visible');
+    }
 });
 
+document.addEventListener('click', (e) => {
+    const searchForm = document.getElementById('searchForm');
+    const mobileSearchBtn = document.getElementById('mobileSearchBtn');
+    if (!searchForm.contains(e.target) && !mobileSearchBtn.contains(e.target)) {
+        searchForm.classList.remove('mobile-visible');
+    }
+});
 
-// 🚀 Initialize app
 async function init() {
   const moviesGrid = document.getElementById('movies-grid');
   const seriesGrid = document.getElementById('series-grid');
@@ -271,16 +274,23 @@ async function init() {
     const series = tvShows.slice(0, 6);
     const anime = tvShows.slice(6, 12);
 
-    movies.forEach(m => moviesGrid.appendChild(createCard(m, 'movie')));
-    series.forEach(s => seriesGrid.appendChild(createCard(s, 'tv')));
-    anime.forEach(a => animeGrid.appendChild(createCard(a, 'tv')));
+    moviesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+    const moviesParent = moviesGrid.firstChild;
+    movies.forEach(m => moviesParent.appendChild(createCard(m, 'movie')));
+
+    seriesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+    const seriesParent = seriesGrid.firstChild;
+    series.forEach(s => seriesParent.appendChild(createCard(s, 'tv')));
+
+    animeGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+    const animeParent = animeGrid.firstChild;
+    anime.forEach(a => animeParent.appendChild(createCard(a, 'tv')));
 
   } catch (err) {
     console.error('App init failed:', err);
   }
 }
 
-// 🧠 Wait for DOM
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
