@@ -7,93 +7,14 @@
     <title>StreamCinema - Watch Movies & Series Online</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#ec13a4",
-                        "background-light": "#f8f6f7",
-                        "background-dark": "#0a0508",
-                        "surface-dark": "#22101c",
-                    },
-                    fontFamily: {
-                        "display": ["Be Vietnam Pro", "sans-serif"]
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.5rem",
-                        "lg": "1rem",
-                        "xl": "1.5rem",
-                        "full": "9999px"
-                    },
-                },
-            },
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Be Vietnam Pro', sans-serif;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        #searchForm.mobile-visible {
-            display: block !important;
-        }
-        @keyframes slideUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        .animate-slide-up {
-            animation: slideUp 0.3s ease-out;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
-<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white font-display">
-    <header class="fixed top-0 z-50 w-full bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-3 sm:px-4 md:px-10 py-3">
-        <div class="max-w-[1440px] mx-auto flex items-center justify-between whitespace-nowrap gap-4">
-            <div class="flex items-center gap-3 sm:gap-8 min-w-0">
-                <div class="flex items-center gap-1.5 sm:gap-2 text-primary flex-shrink-0">
-                    <div class="size-6 sm:size-8">
-                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-white text-sm sm:text-xl font-black leading-tight tracking-[-0.015em] hidden sm:inline">STREAM<span class="text-primary">CINEMA</span></h2>
-                    <h2 class="text-white text-xs font-black sm:hidden">SC</h2>
-                </div>
-                <nav class="hidden lg:flex items-center gap-4 xl:gap-6">
-                    <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Movies</a>
-                    <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Series</a>
-                    <a class="text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="mylist.html">My List</a>
-                    <a class="text-white/60 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">New & Popular</a>
-                </nav>
-            </div>
-            <div class="flex flex-1 justify-end items-center gap-2 sm:gap-4 min-w-0">
-                <form id="searchForm" class="relative hidden sm:block w-full max-w-xs lg:max-w-sm">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="material-symbols-outlined text-white/50 text-lg">search</span>
-                    </div>
-                    <input id="searchInputNavbar" class="w-full h-9 sm:h-10 rounded-full border-none bg-white/10 focus:bg-white/20 focus:ring-1 focus:ring-primary text-white placeholder:text-white/40 pl-9 sm:pl-10 pr-3 sm:pr-4 text-xs sm:text-sm font-normal" placeholder="Search..." type="text"/>
-                </form>
-                <button id="mobileSearchBtn" class="lg:hidden text-white p-2 flex-shrink-0">
-                    <span class="material-symbols-outlined text-lg sm:text-xl">search</span>
-                </button>
-            </div>
-        </div>
-    </header>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white font-body">
+    <div class="grain-overlay"></div>
+    <div id="site-header"></div>
 
     <section class="relative w-full h-[85vh] pt-16 @container">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style='background-image: url("https://i.postimg.cc/tJPxP74c/marvel.jpg");'>
@@ -105,19 +26,19 @@
                     <span class="bg-primary text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Hey there, Movie Buff!</span>
                     <span class="text-white/60 text-xs sm:text-sm font-medium">Your streaming adventure awaits!</span>
                 </div>
-                <h1 class="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-[-0.033em] uppercase">
-                    Dive into <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">Endless</span> Fun
+                <h1 class="text-white text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display leading-tight tracking-[-0.01em] uppercase">
+                    Dive into <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Endless</span> Fun
                 </h1>
                 <p class="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl">
                     Explore our awesome collection of movies, TV series, and anime. Ready for a good laugh? Why did the movie go to the gym? To get better "reel" results!
                 </p>
             </div>
             <div class="flex flex-wrap gap-2 sm:gap-4 mt-2 w-full sm:w-auto">
-                <button class="flex flex-1 sm:flex-none min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-xl h-10 sm:h-12 md:h-14 px-4 sm:px-6 bg-primary text-white text-sm sm:text-lg font-bold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(236,19,164,0.4)]" onclick="document.getElementById('movies-section').scrollIntoView({behavior: 'smooth'})">
+                <button class="flex flex-1 sm:flex-none min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-xl h-10 sm:h-12 md:h-14 px-4 sm:px-6 bg-primary text-white text-sm sm:text-lg font-bold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(124,92,255,0.4)]" onclick="document.getElementById('movies-section').scrollIntoView({behavior: 'smooth'})">
                     <span class="material-symbols-outlined mr-2 text-sm sm:text-base">explore</span>
                     <span>Explore Now</span>
                 </button>
-                <button class="flex flex-1 sm:flex-none min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-xl h-10 sm:h-12 md:h-14 px-4 sm:px-6 bg-white/10 backdrop-blur-md text-white text-sm sm:text-lg font-bold border border-white/20 transition-colors hover:bg-white/20" onclick="document.getElementById('searchInputNavbar').focus(); document.getElementById('searchInputNavbar').scrollIntoView({behavior: 'smooth'})">
+                <button class="flex flex-1 sm:flex-none min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg sm:rounded-xl h-10 sm:h-12 md:h-14 px-4 sm:px-6 bg-white/10 backdrop-blur-md text-white text-sm sm:text-lg font-bold border border-white/20 transition-colors hover:bg-white/20" onclick="document.getElementById('site-search-input')?.focus()">
                     <span class="material-symbols-outlined mr-2 text-sm sm:text-base">search</span>
                     <span>Search</span>
                 </button>
@@ -136,24 +57,29 @@
             <div id="search-results" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4"></div>
         </section>
 
+        <section id="continue-watching-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10 hidden-section">
+            <div class="flex items-center justify-between mb-2 gap-2">
+                <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2 flex-1 min-w-0">
+                    Continue Watching
+                    <span class="material-symbols-outlined text-primary text-xl sm:text-2xl flex-shrink-0">play_circle</span>
+                </h2>
+            </div>
+            <div id="continue-watching-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
+                <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>
+            </div>
+        </section>
+
         <section id="movies-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2 gap-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex items-center gap-2 flex-1 min-w-0">
-                    Trending Now 
+                    Trending Now
                     <span class="material-symbols-outlined text-primary text-xl sm:text-2xl flex-shrink-0">trending_up</span>
                 </h2>
-                <a class="text-primary text-xs sm:text-sm font-bold hover:underline flex-shrink-0" href="#">View All</a>
             </div>
             <div id="movies-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
                 <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                    <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
+                    <div class="flex flex-col gap-2 min-w-[140px] md:min-w-[170px]">
+                        <div class="w-full aspect-[2/3] skeleton"></div>
                     </div>
                 </div>
             </div>
@@ -162,18 +88,11 @@
         <section id="series-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2 gap-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex-1">New Releases</h2>
-                <a class="text-primary text-xs sm:text-sm font-bold hover:underline flex-shrink-0" href="#">View All</a>
             </div>
             <div id="series-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
                 <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                    <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
+                    <div class="flex flex-col gap-2 min-w-[140px] md:min-w-[170px]">
+                        <div class="w-full aspect-[2/3] skeleton"></div>
                     </div>
                 </div>
             </div>
@@ -182,18 +101,11 @@
         <section id="anime-section" class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
             <div class="flex items-center justify-between mb-2 gap-2">
                 <h2 class="text-white text-xl sm:text-2xl md:text-3xl font-bold leading-tight tracking-tight flex-1">Popular Anime</h2>
-                <a class="text-primary text-xs sm:text-sm font-bold hover:underline flex-shrink-0" href="#">View All</a>
             </div>
             <div id="anime-grid" class="flex overflow-x-auto no-scrollbar scroll-smooth py-4 -mx-3 sm:-mx-6 md:-mx-10 px-3 sm:px-6 md:px-10">
                 <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                    <div class="flex items-stretch gap-3 sm:gap-4 md:gap-6">
-                        <div class="flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px]">
-                            <div class="w-full aspect-[2/3] bg-gray-800 rounded-lg sm:rounded-xl animate-pulse"></div>
-                            <div class="flex flex-col gap-1">
-                                <div class="h-3 bg-gray-800 rounded w-3/4"></div>
-                                <div class="h-2 bg-gray-800 rounded w-1/2"></div>
-                            </div>
-                        </div>
+                    <div class="flex flex-col gap-2 min-w-[140px] md:min-w-[170px]">
+                        <div class="w-full aspect-[2/3] skeleton"></div>
                     </div>
                 </div>
             </div>
@@ -205,8 +117,8 @@
                     <h3 class="text-white text-2xl sm:text-3xl font-black mb-3 sm:mb-4">The ultimate cinematic experience.</h3>
                     <p class="text-white/70 text-sm sm:text-lg mb-4 sm:mb-6">Enjoy unlimited access to movies and series. Cancel anytime.</p>
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
-                        <button class="bg-primary text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:opacity-90 transition-opacity text-sm sm:text-base">Start Watching</button>
-                        <button class="bg-white/10 text-white font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-white/20 transition-colors text-sm sm:text-base">Gift Sub</button>
+                        <button class="btn btn-primary">Start Watching</button>
+                        <button class="btn btn-secondary">Gift Sub</button>
                     </div>
                 </div>
                 <div class="hidden lg:flex flex-1 justify-center relative w-full">
@@ -220,234 +132,21 @@
         </section>
     </main>
 
-    <footer class="bg-black/40 border-t border-white/5 py-8 sm:py-12 px-3 sm:px-6 md:px-10">
-        <div class="max-w-[1440px] mx-auto">
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 mb-8 sm:mb-12">
-                <div class="col-span-2 sm:col-span-3 lg:col-span-1">
-                    <div class="flex items-center gap-1.5 sm:gap-2 text-primary mb-4 sm:mb-6">
-                        <div class="size-5 sm:size-6">
-                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-white text-sm sm:text-lg font-black tracking-tight uppercase">STREAMCINEMA</h2>
-                    </div>
-                    <p class="text-white/50 text-xs sm:text-sm leading-relaxed">Global storytelling. Original series, blockbusters, and documentaries.</p>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Explore</h4>
-                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
-                        <li><a class="hover:text-primary" href="#">Movies</a></li>
-                        <li><a class="hover:text-primary" href="#">TV Series</a></li>
-                        <li><a class="hover:text-primary" href="#">Documentaries</a></li>
-                        <li><a class="hover:text-primary" href="#">Originals</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Support</h4>
-                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
-                        <li><a class="hover:text-primary" href="#">Help Center</a></li>
-                        <li><a class="hover:text-primary" href="#">Contact Us</a></li>
-                        <li><a class="hover:text-primary" href="#">Account</a></li>
-                        <li><a class="hover:text-primary" href="#">Devices</a></li>
-                    </ul>
-                </div>
-                <div class="col-span-2 sm:col-span-1">
-                    <h4 class="text-white font-bold mb-3 sm:mb-4 text-sm sm:text-base">Legal</h4>
-                    <ul class="space-y-1.5 sm:space-y-2 text-white/50 text-xs sm:text-sm">
-                        <li><a class="hover:text-primary" href="#">Terms of Service</a></li>
-                        <li><a class="hover:text-primary" href="#">Privacy Policy</a></li>
-                        <li><a class="hover:text-primary" href="#">Cookie Prefs</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="pt-6 sm:pt-8 border-t border-white/5 text-center sm:text-left text-white/30 text-xs">
-                © 2024 StreamCinema. All rights reserved.
-            </div>
-        </div>
-    </footer>
+    <div id="site-footer"></div>
 
+    <script src="js/tmdb.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui-cards.js"></script>
+    <script src="js/layout.js"></script>
     <script type="text/javascript">
+        const { createCard } = window.StreamCinemaCards;
+        const { fetchAnimeFromAnidb } = window.StreamCinemaTMDB;
+        const { continueWatchingStore } = window.StreamCinemaStorage;
+
         const VIDSRC_API = 'https://vsembed.ru';
-        const TMDB_API_KEY = 'f58480d08cca99974e0bc1f09ae7e581';
-        const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300';
-        const CACHE_DURATION = 3600000;
 
-        const cache = {
-            data: {},
-            get(key) {
-                const item = this.data[key];
-                if (!item) return null;
-                if (Date.now() - item.timestamp > CACHE_DURATION) {
-                    delete this.data[key];
-                    return null;
-                }
-                return item.value;
-            },
-            set(key, value) {
-                this.data[key] = { value, timestamp: Date.now() };
-            },
-            clear() {
-                this.data = {};
-            }
-        };
-
-        const myListStorage = {
-            getAll() {
-                try {
-                    const items = localStorage.getItem('streamcinema_mylist');
-                    return items ? JSON.parse(items) : [];
-                } catch (err) {
-                    console.error('Error reading from localStorage:', err);
-                    return [];
-                }
-            },
-            add(tmdbId, title, type) {
-                try {
-                    const items = this.getAll();
-                    const exists = items.some(item => item.tmdb_id === tmdbId);
-                    if (!exists) {
-                        items.push({ tmdb_id: tmdbId, title: title, type: type, added: Date.now() });
-                        localStorage.setItem('streamcinema_mylist', JSON.stringify(items));
-                        return true;
-                    }
-                    return false;
-                } catch (err) {
-                    console.error('Error writing to localStorage:', err);
-                    return false;
-                }
-            },
-            remove(tmdbId) {
-                try {
-                    const items = this.getAll();
-                    const filtered = items.filter(item => item.tmdb_id !== tmdbId);
-                    localStorage.setItem('streamcinema_mylist', JSON.stringify(filtered));
-                } catch (err) {
-                    console.error('Error removing from localStorage:', err);
-                }
-            },
-            clear() {
-                try {
-                    localStorage.removeItem('streamcinema_mylist');
-                } catch (err) {
-                    console.error('Error clearing localStorage:', err);
-                }
-            }
-        };
-
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `fixed bottom-6 right-6 bg-${type === 'success' ? 'primary' : 'red-500'} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-up flex items-center gap-2`;
-            const icon = document.createElement('span');
-            icon.className = 'material-symbols-outlined text-sm';
-            icon.textContent = type === 'success' ? 'check_circle' : 'info';
-            const text = document.createElement('span');
-            text.textContent = message;
-            notification.appendChild(icon);
-            notification.appendChild(text);
-            document.body.appendChild(notification);
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.3s';
-                setTimeout(() => notification.remove(), 300);
-            }, 2500);
-        }
-
-        function addToMyList(tmdbId, title, type) {
-            const added = myListStorage.add(tmdbId, title, type);
-            if (added) {
-                console.log(`Added to My List: ${title}`);
-                showNotification(`Added "${title}" to My List`);
-            } else {
-                console.log(`${title} is already in My List.`);
-                showNotification(`"${title}" is already in your list`, 'info');
-            }
-        }
-
-        async function fetchAnimeFromAnidb(limit = 12) {
-            try {
-                const res = await fetch("https://api.jikan.moe/v4/top/anime");
-                const json = await res.json();
-                const resolved = [];
-                for (const anime of json.data) {
-                    const tmdb = await resolveTMDBFromAnime(anime);
-                    if (tmdb) {
-                        resolved.push({tmdb_id: tmdb.id, title: anime.title, type: tmdb.media_type});
-                    }
-                }
-                return resolved;
-            } catch (e) {
-                console.warn("Anime fetch failed", e);
-                return [];
-            }
-        }
-
-        async function resolveTMDBFromAnime(anime) {
-            const titles = [anime.title, anime.title_english, anime.title_japanese, ...(anime.titles?.map(t => t.title) || [])].filter(Boolean);
-            const cleaned = titles.map(t => t.replace(/[\[\]\(\):\-–!]/g, "").trim());
-            const searchVariants = [...new Set([...titles, ...cleaned])];
-            for (const title of searchVariants) {
-                let res = await tmdbSearch(title, anime.year, anime.type);
-                if (res) return res;
-                res = await tmdbSearch(title, null, anime.type);
-                if (res) return res;
-                res = await tmdbMultiSearch(title);
-                if (res) return res;
-            }
-            return null;
-        }
-
-        async function tmdbSearch(title, year, type) {
-            const media = type === "Movie" ? "movie" : "tv";
-            const q = encodeURIComponent(title);
-            const y = year ? `&year=${year}` : "";
-            const url = `https://api.themoviedb.org/3/search/${media}?query=${q}${y}&api_key=${TMDB_API_KEY}`;
-            try {
-                const res = await fetch(url);
-                if (!res.ok) return null;
-                const json = await res.json();
-                return json.results?.[0] || null;
-            } catch {
-                return null;
-            }
-        }
-
-        async function tmdbMultiSearch(title) {
-            const q = encodeURIComponent(title);
-            const url = `https://api.themoviedb.org/3/search/multi?query=${q}&api_key=${TMDB_API_KEY}`;
-            try {
-                const res = await fetch(url);
-                if (!res.ok) return null;
-                const json = await res.json();
-                return json.results?.find(r => r.media_type === "movie" || r.media_type === "tv") || null;
-            } catch {
-                return null;
-            }
-        }
-
-        async function fetchFromTMDB(path) {
-            const cacheKey = `tmdb_${path}`;
-            const cached = cache.get(cacheKey);
-            if (cached) return cached;
-            const url = `https://api.themoviedb.org/3${path}?api_key=${TMDB_API_KEY}`;
-            try {
-                const res = await fetch(url);
-                const data = res.ok ? await res.json() : null;
-                if (data) cache.set(cacheKey, data);
-                return data;
-            } catch (err) {
-                console.warn('TMDB fetch failed:', err);
-                return null;
-            }
-        }
-
-        async function getPoster(tmdbId, type) {
-            const data = await fetchFromTMDB(`/${type}/${tmdbId}`);
-            if (data?.poster_path) {
-                return TMDB_IMG_BASE + data.poster_path;
-            }
-            return 'https://via.placeholder.com/160x240?text=No+Poster';
-        }
+        window.StreamCinemaLayout.renderHeader('movies');
+        window.StreamCinemaLayout.renderFooter();
 
         async function fetchItemsUntilLimit(endpoint, limit = 12) {
             let items = [];
@@ -470,97 +169,28 @@
             return items.slice(0, limit);
         }
 
-        function createCard(item, type) {
-            const card = document.createElement('div');
-            card.className = 'group flex flex-col gap-2 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[200px] cursor-pointer transition-all duration-300';
-            const handleClick = () => {
-                if (type === 'movie') {
-                    localStorage.setItem('currentMovieId', item.tmdb_id);
-                    localStorage.setItem('currentMovieName', item.title || 'Untitled');
-                    window.location.href = 'movie.html';
-                } else if (type === 'tv') {
-                    localStorage.setItem('currentTVShowId', item.tmdb_id);
-                    localStorage.setItem('currentTVShowName', item.title || 'Untitled');
-                    window.location.href = 'series.html';
-                }
-            };
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'relative w-full aspect-[2/3] overflow-hidden rounded-lg sm:rounded-xl';
-            const img = document.createElement('img');
-            img.className = 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-110';
-            img.alt = item.title || 'Untitled';
-            img.loading = 'lazy';
-            img.src = 'https://via.placeholder.com/160x240?text=Loading...';
-            setTimeout(async () => {
-                const posterUrl = await getPoster(item.tmdb_id, type);
-                img.src = posterUrl;
-            }, 100);
-            const overlay = document.createElement('div');
-            overlay.className = 'absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3 sm:p-4';
-            const buttonGroup = document.createElement('div');
-            buttonGroup.className = 'flex gap-2';
-            const playButton = document.createElement('button');
-            playButton.className = 'bg-primary rounded-full p-1.5 sm:p-2 text-white hover:scale-110 transition-transform';
-            playButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">play_arrow</span>';
-            playButton.onclick = (e) => { e.stopPropagation(); handleClick(); };
-            const listButton = document.createElement('button');
-            listButton.className = 'bg-white/20 backdrop-blur-sm rounded-full p-1.5 sm:p-2 text-white hover:bg-white/30 transition-all';
-            listButton.innerHTML = '<span class="material-symbols-outlined text-xs sm:text-sm">add</span>';
-            listButton.onclick = (e) => {
-                e.stopPropagation();
-                addToMyList(item.tmdb_id, item.title, type);
-            };
-            buttonGroup.appendChild(playButton);
-            buttonGroup.appendChild(listButton);
-            overlay.appendChild(buttonGroup);
-            imgContainer.appendChild(img);
-            imgContainer.appendChild(overlay);
-            const titleEl = document.createElement('div');
-            titleEl.className = 'flex flex-col gap-1';
-            const titleText = document.createElement('p');
-            titleText.className = 'text-white text-xs sm:text-sm font-bold leading-none truncate';
-            titleText.textContent = (item.title || 'Untitled').substring(0, 25);
-            const metaInfo = document.createElement('p');
-            metaInfo.className = 'text-white/50 text-[10px] sm:text-xs';
-            metaInfo.textContent = `${type === 'movie' ? 'Movie' : 'TV'} • 2024`;
-            titleEl.appendChild(titleText);
-            titleEl.appendChild(metaInfo);
-            card.addEventListener('click', handleClick);
-            card.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleClick();
-                }
-            });
-            card.appendChild(imgContainer);
-            card.appendChild(titleEl);
-            return card;
+        function renderGrid(gridId, items, type) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            grid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+            const parent = grid.firstChild;
+            items.forEach(item => parent.appendChild(createCard(item, type, 'browse')));
         }
 
-        async function searchMedia(query) {
-            if (!query.trim()) return [];
-            const cacheKey = `search_${query.toLowerCase()}`;
-            const cached = cache.get(cacheKey);
-            if (cached) return cached;
-            const encodedQuery = encodeURIComponent(query);
-            const url = `https://api.themoviedb.org/3/search/multi?query=${encodedQuery}&api_key=${TMDB_API_KEY}&include_adult=false`;
-            try {
-                const res = await fetch(url);
-                if (!res.ok) return [];
-                const data = await res.json();
-                const results = data.results.filter(item => (item.media_type === 'movie' || item.media_type === 'tv') && item.id && item.poster_path).map(item => ({
-                    tmdb_id: item.id,
-                    title: item.title || item.name || 'Untitled',
-                    type: item.media_type,
-                    poster_path: item.poster_path,
-                    release_date: item.release_date || item.first_air_date
-                }));
-                cache.set(cacheKey, results);
-                return results;
-            } catch (err) {
-                console.error('Search failed:', err);
-                return [];
+        function renderContinueWatching() {
+            const section = document.getElementById('continue-watching-section');
+            const items = continueWatchingStore.getAll();
+            if (items.length === 0) {
+                section.classList.add('hidden-section');
+                return;
             }
+            section.classList.remove('hidden-section');
+            const grid = document.getElementById('continue-watching-grid');
+            grid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
+            const parent = grid.firstChild;
+            // Each entry already knows whether it's a movie or a show, so `type`
+            // is read per-item here instead of being fixed for the whole grid.
+            items.forEach(item => parent.appendChild(createCard(item, item.type, 'continue', { onRemoved: renderContinueWatching })));
         }
 
         function displaySearchResults(results) {
@@ -568,6 +198,7 @@
             const container = document.getElementById('search-results');
             if (!searchSection || !container) return;
             searchSection.classList.remove('hidden');
+            document.getElementById('continue-watching-section').classList.add('hidden-section');
             document.getElementById('movies-section').classList.add('hidden');
             document.getElementById('series-section').classList.add('hidden');
             document.getElementById('anime-section').classList.add('hidden');
@@ -576,76 +207,25 @@
             resultsWrapper.className = 'flex items-stretch gap-3 sm:gap-4 md:gap-6';
             container.appendChild(resultsWrapper);
             results.slice(0, 12).forEach(item => {
-                const card = createCard({tmdb_id: item.tmdb_id, title: item.title}, item.type);
+                const card = createCard({ tmdb_id: item.tmdb_id, title: item.title }, item.type);
                 resultsWrapper.appendChild(card);
             });
         }
 
-        document.getElementById('searchForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const query = e.target.querySelector('input').value.trim();
-            if (!query) return;
-            const results = await searchMedia(query);
+        window.addEventListener('streamcinema:search', async (e) => {
+            const results = await window.StreamCinemaTMDB.searchMedia(e.detail.query);
             displaySearchResults(results);
         });
 
-        document.getElementById('searchInputNavbar')?.addEventListener('keypress', async (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const query = e.target.value.trim();
-                if (!query) return;
-                const results = await searchMedia(query);
-                displaySearchResults(results);
-            }
-        });
-
-        document.getElementById('mobileSearchBtn')?.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const searchForm = document.getElementById('searchForm');
-            const queryInput = document.getElementById('searchInputNavbar');
-            if (!searchForm.classList.contains('mobile-visible')) {
-                searchForm.classList.add('mobile-visible');
-                queryInput?.focus();
-            } else {
-                const query = queryInput?.value.trim();
-                if (query) {
-                    const results = await searchMedia(query);
-                    displaySearchResults(results);
-                }
-                searchForm.classList.remove('mobile-visible');
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            const searchForm = document.getElementById('searchForm');
-            const mobileSearchBtn = document.getElementById('mobileSearchBtn');
-            if (!searchForm.contains(e.target) && !mobileSearchBtn.contains(e.target)) {
-                searchForm.classList.remove('mobile-visible');
-            }
-        });
-
         async function init() {
-            const moviesGrid = document.getElementById('movies-grid');
-            const seriesGrid = document.getElementById('series-grid');
-            const animeGrid = document.getElementById('anime-grid');
-            if (!moviesGrid || !seriesGrid || !animeGrid) {
-                console.error('DOM containers missing');
-                return;
-            }
+            renderContinueWatching();
             try {
                 const movies = await fetchItemsUntilLimit('/movies/latest', 12);
                 const tvShows = await fetchItemsUntilLimit('/tvshows/latest', 12);
-                const series = tvShows.slice(0, 12);
                 const anime = await fetchAnimeFromAnidb(6);
-                moviesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
-                const moviesParent = moviesGrid.firstChild;
-                movies.forEach(m => moviesParent.appendChild(createCard(m, 'movie')));
-                seriesGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
-                const seriesParent = seriesGrid.firstChild;
-                series.forEach(s => seriesParent.appendChild(createCard(s, 'tv')));
-                animeGrid.innerHTML = '<div class="flex items-stretch gap-3 sm:gap-4 md:gap-6"></div>';
-                const animeParent = animeGrid.firstChild;
-                anime.forEach(a => animeParent.appendChild(createCard(a, 'tv')));
+                renderGrid('movies-grid', movies, 'movie');
+                renderGrid('series-grid', tvShows.slice(0, 12), 'tv');
+                renderGrid('anime-grid', anime, 'tv');
             } catch (err) {
                 console.error('App init failed:', err);
             }

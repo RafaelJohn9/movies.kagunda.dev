@@ -1,566 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta name="referrer" content="origin" />
-    <title id="movie-title">StreamCinematic - Movie</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-        :root {
-            --black: #000000;
-            --off-black: #0d0d0d;
-            --dark-grey: #1a1a1a;
-            --mid-grey: #2d2d2d;
-            --light-grey: #a0a0a0;
-            --white: #ffffff;
-            --off-white: #f5f5f5;
-            --accent-red: #ff0000;
-            --accent-yellow: #ffff00;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Libre Baskerville', serif;
-            background: var(--black);
-            color: var(--white);
-            line-height: 1.4;
-            overflow-x: hidden;
-        }
-
-        /* Scanline effect */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.3;
-        }
-
-        /* Header */
-        header {
-            background: var(--black);
-            border-bottom: 3px solid var(--white);
-            padding: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1800px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: stretch;
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 0.05em;
-            background: var(--white);
-            color: var(--black);
-            padding: 1.5rem 2.5rem;
-            display: flex;
-            align-items: center;
-            border-right: 3px solid var(--black);
-        }
-
-        .header-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 0.08em;
-            padding: 1.5rem 2.5rem;
-            display: flex;
-            align-items: center;
-            border-right: 3px solid var(--white);
-        }
-
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-
-        .header-nav a {
-            font-family: 'Bebas Neue', sans-serif;
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.2rem;
-            letter-spacing: 0.08em;
-            padding: 1.5rem 1.5rem;
-            border-left: 3px solid var(--white);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .header-nav a:hover {
-            background: var(--accent-red);
-            color: var(--black);
-        }
-
-        /* Main Content */
-        main {
-            max-width: 1800px;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        /* Title Section */
-        .title-section {
-            background: var(--off-black);
-            border-bottom: 3px solid var(--white);
-            padding: 4rem 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .title-section::before {
-            content: 'NOW PLAYING';
-            position: absolute;
-            top: 1rem;
-            left: 3rem;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.2em;
-            color: var(--light-grey);
-        }
-
-        .title-section::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: -10%;
-            width: 40%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 0%, var(--accent-yellow) 50%, transparent 100%);
-            opacity: 0.03;
-            transform: skewX(-15deg);
-        }
-
-        .movie-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3rem, 8vw, 7rem);
-            line-height: 0.95;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-        }
-
-        /* Player Section */
-        .player-section {
-            background: var(--black);
-            position: relative;
-        }
-
-        .player-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-
-        .player-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 */
-            background: var(--off-black);
-            border: 3px solid var(--white);
-            border-left: none;
-            border-right: none;
-        }
-
-        #movie-player {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Loading State */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--off-black);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loading-spinner {
-            width: 80px;
-            height: 80px;
-            border: 4px solid var(--dark-grey);
-            border-top-color: var(--accent-red);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 2rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 0.2em;
-            color: var(--light-grey);
-        }
-
-        /* Info Bar */
-        .info-bar {
-            background: var(--dark-grey);
-            border-top: 3px solid var(--white);
-            border-bottom: 3px solid var(--white);
-            padding: 2rem 3rem;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .info-content {
-            display: flex;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .info-label {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 0.15em;
-            color: var(--light-grey);
-            margin-bottom: 0.3rem;
-        }
-
-        .info-value {
-            font-size: 1.1rem;
-            color: var(--white);
-        }
-
-        .back-button {
-            font-family: 'Bebas Neue', sans-serif;
-            background: var(--white);
-            color: var(--black);
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.2rem;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: 3px solid var(--white);
-        }
-
-        .back-button:hover {
-            background: var(--accent-red);
-            border-color: var(--accent-red);
-            transform: translateX(-5px);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--off-black);
-            border-top: 3px solid var(--white);
-            padding: 3rem;
-            margin-top: 0;
-        }
-
-        .footer-content {
-            max-width: 1800px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-section h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-            color: var(--accent-yellow);
-        }
-
-        .footer-section a {
-            display: block;
-            color: var(--light-grey);
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            transition: color 0.2s ease;
-        }
-
-        .footer-section a:hover {
-            color: var(--white);
-        }
-
-        .copyright {
-            text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--mid-grey);
-            color: var(--light-grey);
-            font-size: 0.85rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .header-content {
-                grid-template-columns: 1fr;
-            }
-
-            .logo {
-                border-right: none;
-                border-bottom: 3px solid var(--white);
-            }
-
-            .header-title {
-                border-right: none;
-                border-bottom: 3px solid var(--white);
-            }
-
-            .header-nav {
-                justify-content: stretch;
-            }
-
-            .header-nav a {
-                flex: 1;
-                justify-content: center;
-                border-left: none;
-                border-right: 3px solid var(--white);
-            }
-
-            .header-nav a:last-child {
-                border-right: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2rem;
-                padding: 1rem 1.5rem;
-            }
-
-            .header-title {
-                font-size: 1.4rem;
-                padding: 1rem 1.5rem;
-            }
-
-            .header-nav a {
-                font-size: 1rem;
-                padding: 1rem;
-            }
-
-            .title-section {
-                padding: 3rem 1.5rem;
-            }
-
-            .title-section::before {
-                left: 1.5rem;
-            }
-
-            .movie-title {
-                font-size: clamp(2rem, 10vw, 4rem);
-            }
-
-            .info-bar {
-                padding: 1.5rem;
-                grid-template-columns: 1fr;
-            }
-
-            .info-content {
-                flex-direction: column;
-                gap: 1.5rem;
-                align-items: flex-start;
-            }
-
-            .back-button {
-                width: 100%;
-                justify-content: center;
-            }
-
-            footer {
-                padding: 2rem 1.5rem;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animation on load */
-        @keyframes slideInFromLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideInFromTop {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        header {
-            animation: slideInFromTop 0.5s ease-out;
-        }
-
-        .title-section {
-            animation: slideInFromLeft 0.6s ease-out 0.1s backwards;
-        }
-
-        .player-section {
-            animation: slideInFromLeft 0.6s ease-out 0.2s backwards;
-        }
-
-        .info-bar {
-            animation: slideInFromLeft 0.6s ease-out 0.3s backwards;
-        }
-    </style>
+    <title id="movie-title">StreamCinema - Movie</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+    <script src="js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <div class="logo">STREAM</div>
-            <div class="header-title" id="movie-title">Loading Movie...</div>
-            <nav class="header-nav">
-                <a href="index.html">BROWSE</a>
-                <a href="#">MOVIES</a>
-                <a href="#">SERIES</a>
-            </nav>
-        </div>
-    </header>
+<body class="bg-background-dark text-white font-body">
+    <div class="grain-overlay"></div>
+    <div id="site-header"></div>
 
-    <main>
-        <section class="title-section">
-            <h1 class="movie-title" id="movie-title-large">Loading Movie...</h1>
+    <main class="pt-16">
+        <section class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10 pt-8 sm:pt-12 pb-4">
+            <span class="text-primary text-xs font-bold uppercase tracking-[0.2em]">Now Playing</span>
+            <h1 id="movie-title-large" class="font-display text-3xl sm:text-5xl md:text-6xl uppercase leading-tight mt-2 animate-fade-in-up">Loading Movie...</h1>
         </section>
 
-        <section class="player-section">
-            <div class="player-wrapper">
-                <div class="player-container">
-                    <iframe 
+        <section class="max-w-[1440px] mx-auto px-3 sm:px-6 md:px-10">
+            <div class="player-shell animate-fade-in-up">
+                <div class="player-frame-wrap">
+                    <iframe
                         id="movie-player"
+                        data-player-frame="true"
                         referrerpolicy="origin"
                         allowfullscreen
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     ></iframe>
-                    <div class="loading-overlay" id="loading-overlay">
-                        <div class="loading-spinner"></div>
-                        <div class="loading-text">LOADING FILM</div>
+                    <div class="player-loading" id="loading-overlay">
+                        <div class="player-spinner"></div>
+                        <div class="player-loading__text" id="loading-text">Loading Film</div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="info-bar">
-            <div class="info-content">
-                <div class="info-item">
-                    <div class="info-label">FORMAT</div>
-                    <div class="info-value">HD Stream</div>
+            <div class="player-info-bar">
+                <div class="source-switcher">
+                    <span class="source-switcher__label">Source</span>
+                    <select id="source-select" aria-label="Streaming source"></select>
+                    <span class="source-switcher__status" id="source-status"></span>
                 </div>
-                <div class="info-item">
-                    <div class="info-label">STATUS</div>
-                    <div class="info-value">Now Playing</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">SOURCE</div>
-                    <div class="info-value">VidSrc</div>
-                </div>
+                <a href="index.html" class="btn btn-secondary">
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
+                    Back to Browse
+                </a>
             </div>
-            <button class="back-button" onclick="window.location.href='index.html'">
-                <span class="material-icons">arrow_back</span>
-                BACK TO BROWSE
-            </button>
         </section>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>NAVIGATE</h3>
-                <a href="index.html">Home</a>
-                <a href="#">Movies</a>
-                <a href="#">Series</a>
-                <a href="#">My List</a>
-            </div>
-            <div class="footer-section">
-                <h3>SUPPORT</h3>
-                <a href="#">Help Center</a>
-                <a href="#">Terms of Use</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Cookie Settings</a>
-            </div>
-            <div class="footer-section">
-                <h3>CONNECT</h3>
-                <a href="#">Twitter</a>
-                <a href="#">Instagram</a>
-                <a href="#">Facebook</a>
-                <a href="#">YouTube</a>
-            </div>
-            <div class="footer-section">
-                <h3>ACCOUNT</h3>
-                <a href="#">Settings</a>
-                <a href="#">Preferences</a>
-                <a href="#">Sign Out</a>
-            </div>
-        </div>
-        <div class="copyright">
-            © 2024 STREAMCINEMATIC. ALL RIGHTS RESERVED.
-        </div>
-    </footer>
+    <div id="site-footer"></div>
 
+    <script src="js/popup-blocker.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/providers.js"></script>
+    <script src="js/player-loader.js"></script>
+    <script src="js/storage.js"></script>
     <script src="movie.js"></script>
 </body>
 </html>
