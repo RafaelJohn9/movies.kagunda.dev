@@ -5,14 +5,12 @@
 // hardcoded 24-minute guess, never read back anywhere) has been removed in
 // favor of the real Continue Watching stack in storage.js.
 
-const { fetchFromTMDB } = window.StreamCinemaTMDB;
+const { fetchFromTMDB, TMDB_IMG_BASE } = window.StreamCinemaTMDB;
 const { continueWatchingStore } = window.StreamCinemaStorage;
 const { PROVIDERS, getProvider } = window.StreamCinemaProviders;
 const { loadPlayer, getPreferredProvider, setPreferredProvider } = window.StreamCinemaPlayer;
 
 // DOM Elements
-const seasonSelect = document.getElementById('seasonSelect');
-const episodeSelect = document.getElementById('episodeSelect');
 const playerContainer = document.getElementById('playerContainer');
 const playerFrame = document.getElementById('playerFrame');
 const showTitleElement = document.getElementById('showTitle');
@@ -24,9 +22,12 @@ const configDisplay = document.getElementById('configDisplay');
 const episodeTitleElement = document.getElementById('episodeTitle');
 const currentSeasonElement = document.getElementById('currentSeason');
 const currentEpisodeElement = document.getElementById('currentEpisode');
+const prevEpisodeBtn = document.getElementById('prevEpisodeBtn');
+const nextEpisodeBtn = document.getElementById('nextEpisodeBtn');
 const changeEpisodeBtn = document.getElementById('changeEpisodeBtn');
 const selectionArea = document.getElementById('selectionArea');
-const loadEpisodeBtn = document.getElementById('loadEpisodeBtn');
+const seasonTabsEl = document.getElementById('seasonTabs');
+const episodeListEl = document.getElementById('episodeList');
 const backToPlayerBtn = document.getElementById('backToPlayerBtn');
 const sourceSelect = document.getElementById('source-select');
 const sourceStatus = document.getElementById('source-status');
@@ -46,7 +47,14 @@ localStorage.removeItem('resumeTVShowEpisode');
 let seasonsData = [];
 let episodesForCurrentSeason = [];
 let currentSeasonNumber = null;
+let currentEpisodeNumber = null;
 let activeLoad = null;
+
+// Separate from currentSeasonNumber: which season's episodes are shown in the
+// "Episodes" browser panel. Browsing seasons there shouldn't change what's
+// playing until the user actually clicks an episode.
+let browseSeasonNumber = null;
+let browseEpisodes = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   window.StreamCinemaLayout.renderHeader('series');
@@ -70,9 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
   init();
 });
 
-function showSelectionArea() {
+async function showSelectionArea() {
   selectionArea.classList.remove('hidden');
   setTimeout(() => selectionArea.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  await selectBrowseSeason(currentSeasonNumber);
 }
 
 function hideSelectionArea() {
@@ -80,13 +89,122 @@ function hideSelectionArea() {
 }
 
 function disableControls() {
-  episodeSelect.disabled = true;
-  loadEpisodeBtn.disabled = true;
+  prevEpisodeBtn.disabled = true;
+  nextEpisodeBtn.disabled = true;
+  changeEpisodeBtn.disabled = true;
 }
 
 function enableControls() {
-  episodeSelect.disabled = false;
-  loadEpisodeBtn.disabled = false;
+  changeEpisodeBtn.disabled = false;
+  updateNavButtons();
+}
+
+function getSortedSeasons() {
+  return [...seasonsData].sort((a, b) => a.season_number - b.season_number);
+}
+
+function updateNavButtons() {
+  const sortedSeasons = getSortedSeasons();
+  const sortedEpisodes = [...episodesForCurrentSeason].sort((a, b) => a.episode_number - b.episode_number);
+  const seasonIdx = sortedSeasons.findIndex((s) => s.season_number === currentSeasonNumber);
+  const episodeIdx = sortedEpisodes.findIndex((ep) => ep.episode_number === currentEpisodeNumber);
+
+  prevEpisodeBtn.disabled = seasonIdx <= 0 && episodeIdx <= 0;
+  nextEpisodeBtn.disabled = seasonIdx === sortedSeasons.length - 1 && episodeIdx === sortedEpisodes.length - 1;
+}
+
+async function selectBrowseSeason(seasonNumber) {
+  browseSeasonNumber = seasonNumber;
+  renderSeasonTabs();
+  episodeListEl.innerHTML = '<div class="episode-list__empty">Loading episodes...</div>';
+
+  browseEpisodes =
+    seasonNumber === currentSeasonNumber
+      ? episodesForCurrentSeason
+      : await fetchEpisodesForSeason(currentShowId, seasonNumber);
+
+  renderEpisodeList();
+}
+
+function renderSeasonTabs() {
+  seasonTabsEl.innerHTML = '';
+  getSortedSeasons().forEach((season) => {
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'season-tab' + (season.season_number === browseSeasonNumber ? ' is-active' : '');
+    tab.textContent = `Season ${season.season_number}`;
+    tab.addEventListener('click', () => {
+      if (season.season_number !== browseSeasonNumber) selectBrowseSeason(season.season_number);
+    });
+    seasonTabsEl.appendChild(tab);
+  });
+}
+
+function renderEpisodeList() {
+  episodeListEl.innerHTML = '';
+
+  if (browseEpisodes.length === 0) {
+    episodeListEl.innerHTML = '<div class="episode-list__empty">No episodes found for this season.</div>';
+    return;
+  }
+
+  const sorted = [...browseEpisodes].sort((a, b) => a.episode_number - b.episode_number);
+  sorted.forEach((episode) => {
+    const isCurrent = browseSeasonNumber === currentSeasonNumber && episode.episode_number === currentEpisodeNumber;
+
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'episode-row' + (isCurrent ? ' is-current' : '');
+
+    const thumb = document.createElement('div');
+    thumb.className = 'episode-row__thumb';
+    if (episode.still_path) {
+      const img = document.createElement('img');
+      img.src = TMDB_IMG_BASE + episode.still_path;
+      img.alt = '';
+      img.loading = 'lazy';
+      thumb.appendChild(img);
+    }
+
+    const body = document.createElement('div');
+    body.className = 'episode-row__body';
+
+    const titleLine = document.createElement('div');
+    titleLine.className = 'episode-row__title-line';
+    const title = document.createElement('span');
+    title.className = 'episode-row__title';
+    title.textContent = episode.name || `Episode ${episode.episode_number}`;
+    titleLine.appendChild(title);
+    if (isCurrent) {
+      const badge = document.createElement('span');
+      badge.className = 'episode-row__playing-badge';
+      badge.textContent = 'Playing';
+      titleLine.appendChild(badge);
+    }
+
+    const overview = document.createElement('div');
+    overview.className = 'episode-row__overview';
+    overview.textContent = episode.overview || '';
+
+    body.appendChild(titleLine);
+    body.appendChild(overview);
+
+    const number = document.createElement('div');
+    number.className = 'episode-row__number';
+    number.textContent = episode.episode_number;
+
+    row.appendChild(number);
+    row.appendChild(thumb);
+    row.appendChild(body);
+
+    row.addEventListener('click', () => {
+      episodesForCurrentSeason = browseEpisodes;
+      loadEpisodePlayer(episode, browseSeasonNumber);
+      hideSelectionArea();
+    });
+
+    episodeListEl.appendChild(row);
+  });
 }
 
 async function init() {
@@ -111,14 +229,12 @@ async function loadInitialEpisode() {
     return;
   }
 
-  const sortedSeasons = [...seasonsData].sort((a, b) => a.season_number - b.season_number);
+  const sortedSeasons = getSortedSeasons();
   const requestedSeason = resumeSeason ? Number(resumeSeason) : sortedSeasons[0].season_number;
   const seasonExists = sortedSeasons.some((s) => s.season_number === requestedSeason);
   const seasonNumber = seasonExists ? requestedSeason : sortedSeasons[0].season_number;
 
-  seasonSelect.value = seasonNumber;
   episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, seasonNumber);
-  populateEpisodeSelector(episodesForCurrentSeason);
   enableControls();
 
   if (episodesForCurrentSeason.length === 0) {
@@ -137,19 +253,11 @@ async function loadInitialEpisode() {
 async function fetchAndPopulateSeasons(showId) {
   const showDetails = await fetchFromTMDB(`/tv/${showId}?append_to_response=seasons`);
   if (!showDetails) {
-    seasonSelect.innerHTML = '<option value="">-- Error Loading Seasons --</option>';
     loadingPlaceholderStandalone.textContent = 'Failed to load seasons.';
     return;
   }
 
   seasonsData = (showDetails.seasons || []).filter((season) => season.season_number > 0);
-  seasonSelect.innerHTML = '<option value="">-- Select Season --</option>';
-  seasonsData.forEach((season) => {
-    const option = document.createElement('option');
-    option.value = season.season_number;
-    option.textContent = `Season ${season.season_number}`;
-    seasonSelect.appendChild(option);
-  });
 }
 
 async function fetchEpisodesForSeason(showId, seasonNumber) {
@@ -157,32 +265,33 @@ async function fetchEpisodesForSeason(showId, seasonNumber) {
   return seasonDetails?.episodes || [];
 }
 
-function populateEpisodeSelector(episodes) {
-  episodeSelect.innerHTML = '<option value="">-- Select Episode --</option>';
-  episodes.forEach((episode) => {
-    const option = document.createElement('option');
-    option.value = episode.episode_number;
-    option.textContent = `E${episode.episode_number}: ${episode.name}`;
-    episodeSelect.appendChild(option);
-  });
-  if (episodes.length === 0) {
-    loadEpisodeBtn.disabled = true;
-  }
-}
+async function goToAdjacentEpisode(direction) {
+  const sortedEpisodes = [...episodesForCurrentSeason].sort((a, b) => a.episode_number - b.episode_number);
+  const episodeIdx = sortedEpisodes.findIndex((ep) => ep.episode_number === currentEpisodeNumber);
+  const targetIdx = episodeIdx + direction;
 
-seasonSelect.addEventListener('change', async (e) => {
-  const selectedSeasonNumber = parseInt(e.target.value, 10);
-  if (isNaN(selectedSeasonNumber)) {
-    episodeSelect.innerHTML = '<option value="">-- Select Episode --</option>';
-    episodesForCurrentSeason = [];
-    loadEpisodeBtn.disabled = true;
+  if (episodeIdx !== -1 && targetIdx >= 0 && targetIdx < sortedEpisodes.length) {
+    loadEpisodePlayer(sortedEpisodes[targetIdx], currentSeasonNumber);
     return;
   }
+
+  const sortedSeasons = getSortedSeasons();
+  const seasonIdx = sortedSeasons.findIndex((s) => s.season_number === currentSeasonNumber);
+  const targetSeasonIdx = seasonIdx + direction;
+  if (targetSeasonIdx < 0 || targetSeasonIdx >= sortedSeasons.length) return;
+
+  const targetSeason = sortedSeasons[targetSeasonIdx];
   disableControls();
-  episodesForCurrentSeason = await fetchEpisodesForSeason(currentShowId, selectedSeasonNumber);
-  populateEpisodeSelector(episodesForCurrentSeason);
+  const episodes = await fetchEpisodesForSeason(currentShowId, targetSeason.season_number);
   enableControls();
-});
+  if (episodes.length === 0) return;
+
+  const sortedTargetEpisodes = [...episodes].sort((a, b) => a.episode_number - b.episode_number);
+  const targetEpisode = direction > 0 ? sortedTargetEpisodes[0] : sortedTargetEpisodes[sortedTargetEpisodes.length - 1];
+
+  episodesForCurrentSeason = episodes;
+  loadEpisodePlayer(targetEpisode, targetSeason.season_number);
+}
 
 function loadEpisodePlayer(episode, seasonNum) {
   if (!episode) return;
@@ -212,6 +321,8 @@ function loadEpisodePlayer(episode, seasonNum) {
         episodeTitleElement.textContent = episode.name || `Episode ${episode.episode_number}`;
         currentSeasonElement.textContent = seasonNum;
         currentEpisodeElement.textContent = episode.episode_number;
+        currentEpisodeNumber = episode.episode_number;
+        updateNavButtons();
 
         continueWatchingStore.push({
           type: 'tv',
@@ -235,22 +346,14 @@ changeEpisodeBtn.addEventListener('click', (e) => {
   showSelectionArea();
 });
 
-loadEpisodeBtn.addEventListener('click', () => {
-  const selectedSeasonNum = parseInt(seasonSelect.value, 10);
-  const selectedEpisodeNum = parseInt(episodeSelect.value, 10);
+prevEpisodeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  goToAdjacentEpisode(-1);
+});
 
-  if (isNaN(selectedSeasonNum) || isNaN(selectedEpisodeNum)) {
-    alert('Please select both a season and an episode.');
-    return;
-  }
-
-  const selectedEpisode = episodesForCurrentSeason.find((ep) => ep.episode_number === selectedEpisodeNum);
-  if (selectedEpisode) {
-    loadEpisodePlayer(selectedEpisode, selectedSeasonNum);
-    hideSelectionArea();
-  } else {
-    alert('Selected episode not found.');
-  }
+nextEpisodeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  goToAdjacentEpisode(1);
 });
 
 backToPlayerBtn.addEventListener('click', () => {

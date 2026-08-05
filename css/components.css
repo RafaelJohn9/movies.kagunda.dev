@@ -331,6 +331,12 @@
   background: rgba(255, 255, 255, 0.14);
 }
 
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ---------- Player chrome ---------- */
 .player-shell {
   position: relative;
@@ -444,6 +450,148 @@
 .source-switcher__status {
   font-size: 0.75rem;
   color: var(--text-mute);
+}
+
+/* ---------- Episode browser ---------- */
+.season-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.season-tab {
+  flex-shrink: 0;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.season-tab:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--text);
+}
+
+.season-tab.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.episode-list {
+  max-height: 26rem;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.episode-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.episode-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.episode-row.is-current {
+  background: rgba(124, 92, 255, 0.12);
+  border-color: var(--accent);
+}
+
+.episode-row__number {
+  flex-shrink: 0;
+  width: 2rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--text-mute);
+}
+
+.episode-row.is-current .episode-row__number {
+  color: var(--accent);
+}
+
+.episode-row__thumb {
+  flex-shrink: 0;
+  width: 6.5rem;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.episode-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.episode-row__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.episode-row__title-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.episode-row__title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.episode-row__playing-badge {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.episode-row__overview {
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  margin-top: 0.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.episode-list__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-mute);
+  font-size: 0.85rem;
 }
 
 /* ---------- Misc ---------- */

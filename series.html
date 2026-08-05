@@ -53,43 +53,32 @@
                         Season <span id="currentSeason">1</span> · Episode <span id="currentEpisode">1</span>
                     </div>
                 </div>
-                <button id="changeEpisodeBtn" class="btn btn-secondary">
-                    <span class="material-symbols-outlined text-base">tune</span>
-                    Change Episode
-                </button>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button id="prevEpisodeBtn" class="btn btn-secondary" title="Previous episode">
+                        <span class="material-symbols-outlined text-base">skip_previous</span>
+                        <span class="hidden sm:inline">Prev</span>
+                    </button>
+                    <button id="nextEpisodeBtn" class="btn btn-primary" title="Next episode">
+                        <span class="hidden sm:inline">Next</span>
+                        <span class="material-symbols-outlined text-base">skip_next</span>
+                    </button>
+                    <button id="changeEpisodeBtn" class="btn btn-secondary">
+                        <span class="material-symbols-outlined text-base">video_library</span>
+                        Episodes
+                    </button>
+                </div>
             </div>
 
-            <div id="selectionArea" class="hidden rounded-lg sm:rounded-xl bg-surface-dark border border-white/10 p-4 sm:p-8">
-                <div class="text-center mb-6">
-                    <h2 class="text-xl sm:text-2xl font-bold">Select Episode</h2>
-                    <p class="text-white/50 text-sm mt-1">Choose a season and episode to watch</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
-                    <div class="flex flex-col gap-2">
-                        <label for="seasonSelect" class="text-xs uppercase tracking-wider text-white/50">Season</label>
-                        <select id="seasonSelect" class="bg-surface-dark-2 border border-white/10 rounded-lg px-4 py-3 text-white">
-                            <option value="">-- Select Season --</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <label for="episodeSelect" class="text-xs uppercase tracking-wider text-white/50">Episode</label>
-                        <select id="episodeSelect" class="bg-surface-dark-2 border border-white/10 rounded-lg px-4 py-3 text-white">
-                            <option value="">-- Select Episode --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <button id="loadEpisodeBtn" class="btn btn-primary">
-                        <span class="material-symbols-outlined text-base">play_arrow</span>
-                        Load Episode
-                    </button>
+            <div id="selectionArea" class="hidden rounded-lg sm:rounded-xl bg-surface-dark border border-white/10 overflow-hidden">
+                <div class="flex items-center justify-between p-4 sm:p-6 border-b border-white/10">
+                    <h2 class="text-lg sm:text-xl font-bold">Episodes</h2>
                     <button id="backToPlayerBtn" class="btn btn-secondary">
                         <span class="material-symbols-outlined text-base">close</span>
-                        Cancel
+                        Close
                     </button>
                 </div>
+                <div id="seasonTabs" class="season-tabs"></div>
+                <div id="episodeList" class="episode-list"></div>
             </div>
 
             <div id="loadingPlaceholderStandalone" class="rounded-lg sm:rounded-xl bg-surface-dark border border-white/10 p-8 text-center text-white/50">
