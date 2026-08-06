@@ -34,20 +34,21 @@
     }
   }
 
+  // id/title live in the query string (not just localStorage) so the
+  // resulting URL is shareable — anyone opening it lands on the same title.
   function goToPlayer(item, type) {
+    const title = item.title || 'Untitled';
     if (type === 'movie') {
-      localStorage.setItem('currentMovieId', item.tmdb_id);
-      localStorage.setItem('currentMovieName', item.title || 'Untitled');
-      window.location.href = 'movie.html';
+      const params = new URLSearchParams({ id: item.tmdb_id, title });
+      window.location.href = `movie.html?${params.toString()}`;
       return;
     }
-    localStorage.setItem('currentTVShowId', item.tmdb_id);
-    localStorage.setItem('currentTVShowName', item.title || 'Untitled');
+    const params = new URLSearchParams({ id: item.tmdb_id, title });
     if (item.season != null && item.episode != null) {
-      localStorage.setItem('resumeTVShowSeason', String(item.season));
-      localStorage.setItem('resumeTVShowEpisode', String(item.episode));
+      params.set('season', item.season);
+      params.set('episode', item.episode);
     }
-    window.location.href = 'series.html';
+    window.location.href = `series.html?${params.toString()}`;
   }
 
   /**
@@ -134,6 +135,25 @@
     overlay.appendChild(actions);
     posterWrap.appendChild(img);
     posterWrap.appendChild(overlay);
+
+    if (variant === 'continue') {
+      const progressEntry = window.StreamCinemaStorage.watchProgressStore.get({
+        type,
+        tmdbId: normalized.tmdb_id,
+        season: normalized.season,
+        episode: normalized.episode,
+      });
+      if (progressEntry && progressEntry.duration) {
+        const fraction = Math.min(1, progressEntry.time / progressEntry.duration);
+        const track = document.createElement('div');
+        track.className = 'media-card__progress';
+        const fill = document.createElement('div');
+        fill.className = 'media-card__progress-fill';
+        fill.style.width = `${Math.round(fraction * 100)}%`;
+        track.appendChild(fill);
+        posterWrap.appendChild(track);
+      }
+    }
 
     const meta = document.createElement('div');
     meta.className = 'flex flex-col gap-1';

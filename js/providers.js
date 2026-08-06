@@ -6,6 +6,13 @@
 // (their own docs were behind a verification wall / 403 when checked) — a
 // wrong pattern here just means player-loader.js falls through to the next
 // provider, so this is a safe default rather than a hard requirement.
+//
+// `resumeParam` is the query param each provider reads to start playback at
+// a given second. Confirmed for vidcore (`startAt`) and the vidsrc/vidapi
+// family (`resumeAt`); the rest are inferred from that same `resumeAt`
+// convention. Same reasoning as above: an unrecognized param is just
+// ignored by the provider, so a wrong guess only costs the resume feature,
+// not playback itself.
 
 (function () {
   'use strict';
@@ -22,6 +29,7 @@
       name: 'VidCore',
       movie: (tmdbId) => `https://www.vidcore.org/embed/movie/${tmdbId}?autoPlay=true`,
       tv: (tmdbId, season, episode) => `https://www.vidcore.org/embed/tv/${tmdbId}/${season}/${episode}?autoPlay=true`,
+      resumeParam: 'startAt',
     },
     {
       id: 'videasy',
@@ -54,8 +62,15 @@
   }
 
   function buildEmbedUrl(provider, target) {
-    if (target.type === 'movie') return provider.movie(target.tmdbId);
-    return provider.tv(target.tmdbId, target.season, target.episode);
+    const base = target.type === 'movie'
+      ? provider.movie(target.tmdbId)
+      : provider.tv(target.tmdbId, target.season, target.episode);
+
+    if (!target.resumeAt || target.resumeAt < 1) return base;
+
+    const url = new URL(base);
+    url.searchParams.set(provider.resumeParam || 'resumeAt', Math.floor(target.resumeAt));
+    return url.toString();
   }
 
   window.StreamCinemaProviders = { PROVIDERS, getProvider, buildEmbedUrl };

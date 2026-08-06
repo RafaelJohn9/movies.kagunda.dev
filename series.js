@@ -1,14 +1,15 @@
 // series.js — series detail page: season/episode selection + player.
 // Popup blocking lives in popup-blocker.js; TMDB calls in tmdb.js; provider
-// fallback/switching in providers.js + player-loader.js. The old fake
-// watch-progress simulator (a setInterval incrementing a counter against a
-// hardcoded 24-minute guess, never read back anywhere) has been removed in
-// favor of the real Continue Watching stack in storage.js.
+// fallback/switching in providers.js + player-loader.js. Playback resume
+// (actual elapsed time, sourced from the provider's postMessage events) is
+// in watch-progress.js; "what was watched" is the separate Continue
+// Watching stack in storage.js.
 
 const { fetchFromTMDB, TMDB_IMG_BASE } = window.StreamCinemaTMDB;
 const { continueWatchingStore } = window.StreamCinemaStorage;
 const { PROVIDERS, getProvider } = window.StreamCinemaProviders;
 const { loadPlayer, getPreferredProvider, setPreferredProvider } = window.StreamCinemaPlayer;
+const { watch: watchProgress, getResumeSeconds } = window.StreamCinemaProgress;
 
 // DOM Elements
 const playerContainer = document.getElementById('playerContainer');
@@ -31,17 +32,47 @@ const episodeListEl = document.getElementById('episodeList');
 const backToPlayerBtn = document.getElementById('backToPlayerBtn');
 const sourceSelect = document.getElementById('source-select');
 const sourceStatus = document.getElementById('source-status');
+const shareLinkBtn = document.getElementById('share-link-btn');
 
-// Get show info from localStorage
-const currentShowId = localStorage.getItem('currentTVShowId');
-const currentShowName = localStorage.getItem('currentTVShowName');
+// The URL is the source of truth (so a link to this page is shareable);
+// localStorage is only a fallback for in-app navigation and gets kept in
+// sync with whatever the URL resolves to.
+const urlParams = new URLSearchParams(window.location.search);
+const currentShowId = urlParams.get('id') || localStorage.getItem('currentTVShowId');
+const currentShowName = urlParams.get('title') || localStorage.getItem('currentTVShowName');
 
-// A Continue Watching card sets these before navigating here so the show
-// resumes at the last-watched episode instead of always S1E1.
-const resumeSeason = localStorage.getItem('resumeTVShowSeason');
-const resumeEpisode = localStorage.getItem('resumeTVShowEpisode');
+// A shared link or a Continue Watching card can specify season/episode so
+// the show resumes at that episode instead of always S1E1.
+const resumeSeason = urlParams.get('season') || localStorage.getItem('resumeTVShowSeason');
+const resumeEpisode = urlParams.get('episode') || localStorage.getItem('resumeTVShowEpisode');
 localStorage.removeItem('resumeTVShowSeason');
 localStorage.removeItem('resumeTVShowEpisode');
+
+if (currentShowId) {
+  localStorage.setItem('currentTVShowId', currentShowId);
+  localStorage.setItem('currentTVShowName', currentShowName || 'Untitled');
+}
+
+function syncShareUrl(seasonNum, episodeNum) {
+  const url = new URL(window.location.pathname, window.location.origin);
+  url.searchParams.set('id', currentShowId);
+  url.searchParams.set('title', currentShowName || 'Untitled');
+  if (seasonNum != null) url.searchParams.set('season', seasonNum);
+  if (episodeNum != null) url.searchParams.set('episode', episodeNum);
+  if (window.location.href !== url.toString()) {
+    window.history.replaceState(null, '', url.toString());
+  }
+}
+
+shareLinkBtn?.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    window.StreamCinemaCards.showNotification('Link copied to clipboard');
+  } catch (err) {
+    console.error('Could not copy link:', err);
+    window.StreamCinemaCards.showNotification('Could not copy link', 'info');
+  }
+});
 
 // State
 let seasonsData = [];
@@ -49,6 +80,7 @@ let episodesForCurrentSeason = [];
 let currentSeasonNumber = null;
 let currentEpisodeNumber = null;
 let activeLoad = null;
+let activeProgressWatch = null;
 
 // Separate from currentSeasonNumber: which season's episodes are shown in the
 // "Episodes" browser panel. Browsing seasons there shouldn't change what's
@@ -298,15 +330,24 @@ function loadEpisodePlayer(episode, seasonNum) {
 
   currentSeasonNumber = seasonNum;
   activeLoad?.cancel();
+  activeProgressWatch?.stop();
 
   playerContainer.classList.remove('hidden');
   configDisplay.classList.add('hidden');
   loadingPlaceholder.classList.remove('is-hidden');
   loadingText.textContent = 'Loading Episode';
 
+  const target = {
+    type: 'tv',
+    tmdbId: currentShowId,
+    season: seasonNum,
+    episode: episode.episode_number,
+    resumeAt: getResumeSeconds({ type: 'tv', tmdbId: currentShowId, season: seasonNum, episode: episode.episode_number }),
+  };
+
   activeLoad = loadPlayer(
     playerFrame,
-    { type: 'tv', tmdbId: currentShowId, season: seasonNum, episode: episode.episode_number },
+    target,
     {
       onAttempt(providerId) {
         sourceSelect.value = providerId;
@@ -323,6 +364,7 @@ function loadEpisodePlayer(episode, seasonNum) {
         currentEpisodeElement.textContent = episode.episode_number;
         currentEpisodeNumber = episode.episode_number;
         updateNavButtons();
+        syncShareUrl(seasonNum, episode.episode_number);
 
         continueWatchingStore.push({
           type: 'tv',
@@ -331,6 +373,13 @@ function loadEpisodePlayer(episode, seasonNum) {
           season: seasonNum,
           episode: episode.episode_number,
           episodeTitle: episode.name,
+        });
+
+        activeProgressWatch = watchProgress(playerFrame, {
+          type: 'tv',
+          tmdbId: currentShowId,
+          season: seasonNum,
+          episode: episode.episode_number,
         });
       },
       onAllFailed() {

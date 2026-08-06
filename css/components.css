@@ -266,6 +266,20 @@
   background: var(--danger);
 }
 
+.media-card__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.media-card__progress-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
 .media-card__badge {
   position: absolute;
   top: 0.5rem;

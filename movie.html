@@ -44,10 +44,16 @@
                     <select id="source-select" aria-label="Streaming source"></select>
                     <span class="source-switcher__status" id="source-status"></span>
                 </div>
-                <a href="index.html" class="btn btn-secondary">
-                    <span class="material-symbols-outlined text-base">arrow_back</span>
-                    Back to Browse
-                </a>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="share-link-btn" class="btn btn-secondary">
+                        <span class="material-symbols-outlined text-base">link</span>
+                        Copy Link
+                    </button>
+                    <a href="index.html" class="btn btn-secondary">
+                        <span class="material-symbols-outlined text-base">arrow_back</span>
+                        Back to Browse
+                    </a>
+                </div>
             </div>
         </section>
     </main>
@@ -59,6 +65,8 @@
     <script src="js/providers.js"></script>
     <script src="js/player-loader.js"></script>
     <script src="js/storage.js"></script>
+    <script src="js/watch-progress.js"></script>
+    <script src="js/ui-cards.js"></script>
     <script src="movie.js"></script>
 </body>
 </html>
