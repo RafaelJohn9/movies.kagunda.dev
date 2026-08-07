@@ -81,10 +81,23 @@
     img.className = 'media-card__poster';
     img.alt = normalized.title || 'Untitled';
     img.loading = 'lazy';
-    img.src = PLACEHOLDER_POSTER;
-    setTimeout(async () => {
-      img.src = await window.StreamCinemaTMDB.getPoster(normalized.tmdb_id, type);
-    }, 100);
+    if (normalized.poster_path) {
+      // Already have the poster path from a TMDB list response — skip the
+      // extra per-card lookup that items without it need below.
+      img.src = window.StreamCinemaTMDB.TMDB_IMG_BASE + normalized.poster_path;
+    } else {
+      img.src = PLACEHOLDER_POSTER;
+      setTimeout(async () => {
+        img.src = await window.StreamCinemaTMDB.getPoster(normalized.tmdb_id, type);
+      }, 100);
+    }
+
+    if (normalized.vote_average) {
+      const rating = document.createElement('span');
+      rating.className = 'media-card__rating';
+      rating.innerHTML = `<span class="material-symbols-outlined">star</span>${normalized.vote_average.toFixed(1)}`;
+      posterWrap.appendChild(rating);
+    }
 
     const overlay = document.createElement('div');
     overlay.className = 'media-card__overlay';
@@ -162,10 +175,15 @@
     titleEl.textContent = (normalized.title || 'Untitled').substring(0, 25);
     const metaEl = document.createElement('p');
     metaEl.className = 'media-card__meta';
-    metaEl.textContent =
-      variant === 'continue' && normalized.episodeTitle
-        ? normalized.episodeTitle
-        : `${type === 'movie' ? 'Movie' : 'TV'}${variant === 'list' ? ' • Saved' : ''}`;
+    if (variant === 'continue' && normalized.episodeTitle) {
+      metaEl.textContent = normalized.episodeTitle;
+    } else {
+      const year = normalized.release_date ? new Date(normalized.release_date).getFullYear() : null;
+      const parts = [type === 'movie' ? 'Movie' : 'TV'];
+      if (year && !Number.isNaN(year)) parts.push(year);
+      if (variant === 'list') parts.push('Saved');
+      metaEl.textContent = parts.join(' • ');
+    }
     meta.appendChild(titleEl);
     meta.appendChild(metaEl);
 

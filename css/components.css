@@ -1,5 +1,45 @@
 /* StreamCinema — shared components built on top of theme.css tokens */
 
+/* ---------- Hero (rotating featured titles) ---------- */
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.hero-bg-layer.is-active {
+  opacity: 1;
+}
+
+.hero-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.hero-dot {
+  width: 1.75rem;
+  height: 0.3rem;
+  padding: 0;
+  border-radius: var(--radius-full);
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: background 0.2s ease, width 0.2s ease;
+}
+
+.hero-dot:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.hero-dot.is-active {
+  background: var(--accent);
+  width: 2.5rem;
+}
+
 /* ---------- Header / Nav ---------- */
 .site-header {
   position: fixed;
@@ -186,6 +226,17 @@
   min-width: 140px;
   cursor: pointer;
   outline: none;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.media-card:hover,
+.media-card:focus-visible {
+  transform: translateY(-4px);
+}
+
+.media-card:hover .media-card__poster-wrap,
+.media-card:focus-visible .media-card__poster-wrap {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-strong);
 }
 
 @media (min-width: 768px) {
@@ -201,6 +252,7 @@
   overflow: hidden;
   border-radius: var(--radius);
   background: var(--surface);
+  transition: box-shadow 0.25s ease;
 }
 
 .media-card__poster {
@@ -292,6 +344,26 @@
   padding: 0.15rem 0.5rem;
   border-radius: var(--radius-sm);
   text-transform: uppercase;
+}
+
+.media-card__rating {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--accent-2);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.media-card__rating .material-symbols-outlined {
+  font-size: 0.8rem;
+  font-variation-settings: 'FILL' 1;
 }
 
 .media-card__title {
@@ -606,6 +678,59 @@
   text-align: center;
   color: var(--text-mute);
   font-size: 0.85rem;
+}
+
+/* ---------- Row scroller (arrow-navigable horizontal rows) ---------- */
+.row-scroller {
+  position: relative;
+}
+
+.row-scroller__arrow {
+  display: none;
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: rgba(8, 8, 12, 0.75);
+  backdrop-filter: blur(4px);
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.row-scroller.has-overflow:hover .row-scroller__arrow {
+  opacity: 1;
+}
+
+.row-scroller__arrow:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.row-scroller__arrow:disabled {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.row-scroller__arrow--left {
+  left: 0.25rem;
+}
+
+.row-scroller__arrow--right {
+  right: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .row-scroller__arrow {
+    display: flex;
+  }
 }
 
 /* ---------- Misc ---------- */
