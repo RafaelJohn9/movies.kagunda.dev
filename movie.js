@@ -1,6 +1,6 @@
 // movie.js — movie detail/player page logic.
-// Popup blocking now lives in popup-blocker.js; provider fallback/switching
-// lives in providers.js + player-loader.js. This file just wires them up.
+// Popup blocking now lives in popup-blocker.js; provider selection lives in
+// providers.js + player-loader.js. This file just wires them up.
 
 document.addEventListener('DOMContentLoaded', () => {
   window.StreamCinemaLayout.renderHeader('movies');
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingText = document.getElementById('loading-text');
   const sourceSelect = document.getElementById('source-select');
   const sourceStatus = document.getElementById('source-status');
+  const nextSourceBtn = document.getElementById('next-source-btn');
   const shareLinkBtn = document.getElementById('share-link-btn');
 
   if (!movieId) {
@@ -39,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.title = `${movieName || 'Movie'} - StreamCinema`;
 
   const { PROVIDERS, getProvider } = window.StreamCinemaProviders;
-  const { loadPlayer, getPreferredProvider, setPreferredProvider } = window.StreamCinemaPlayer;
+  const { loadPlayer, getPreferredProvider, setPreferredProvider, getNextProvider } = window.StreamCinemaPlayer;
   const { continueWatchingStore } = window.StreamCinemaStorage;
   const { watch: watchProgress, getResumeSeconds } = window.StreamCinemaProgress;
 
@@ -78,27 +79,34 @@ document.addEventListener('DOMContentLoaded', () => {
       {
         onAttempt(providerId) {
           sourceSelect.value = providerId;
-          sourceStatus.textContent = `Trying ${getProvider(providerId).name}...`;
+          sourceStatus.textContent = `Loading ${getProvider(providerId).name}...`;
+        },
+        onSkipped(providerId) {
+          sourceStatus.textContent = `${getProvider(providerId).name} is unreachable, trying the next source...`;
         },
         onResolved(providerId) {
           loadingOverlay.classList.add('is-hidden');
           sourceSelect.value = providerId;
-          sourceStatus.textContent = `Playing via ${getProvider(providerId).name}`;
+          sourceStatus.textContent = `Via ${getProvider(providerId).name}. Not playing? Try the next source.`;
           continueWatchingStore.push({ type: 'movie', tmdbId: movieId, title: movieName });
           activeProgressWatch = watchProgress(iframe, { type: 'movie', tmdbId: movieId });
         },
         onAllFailed() {
-          loadingText.textContent = 'ALL SOURCES FAILED — TRY ANOTHER';
-          sourceStatus.textContent = 'No source could load this title.';
+          loadingText.textContent = 'NO SOURCE IS REACHABLE RIGHT NOW';
+          sourceStatus.textContent = 'Every source is unreachable. Check your connection and retry.';
         },
       }
     );
   }
 
-  sourceSelect.addEventListener('change', () => {
-    setPreferredProvider(sourceSelect.value);
+  function switchSource(providerId) {
+    sourceSelect.value = providerId;
+    setPreferredProvider(providerId);
     startPlayback();
-  });
+  }
+
+  sourceSelect.addEventListener('change', () => switchSource(sourceSelect.value));
+  nextSourceBtn?.addEventListener('click', () => switchSource(getNextProvider(sourceSelect.value).id));
 
   startPlayback();
 });

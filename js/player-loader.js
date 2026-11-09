@@ -1,26 +1,30 @@
-// player-loader.js — loads an embed URL into an iframe with an automatic
-// fallback chain across providers, starting from whichever one the user
-// picked last (manual switcher) or the default otherwise.
+// player-loader.js — picks a provider and loads its embed into an iframe.
 //
-// Caveat: cross-origin iframes can't be introspected, so "success" here just
-// means the provider's document loaded within the timeout, not that playback
-// actually works. That's an inherent limit of iframe-based embeds, which is
-// why a manual switcher exists alongside the automatic fallback.
+// Cross-origin iframes can't be introspected: the `load` event fires for a
+// working player, for a provider's own "no sources found" page, for a
+// Cloudflare challenge, and even for Chrome's built-in error page. So there
+// is no honest way to detect "playback didn't work" from out here. An
+// earlier version pretended there was — it treated an 8s timeout as failure
+// and `load` as success — which switched away from slow-but-fine providers
+// and never away from broken ones. That pseudo-fallback is gone.
 //
-// Worse, Chrome fires `load` on an iframe even when navigation fails (it
-// loads its own error page), so a dead domain (NXDOMAIN, bad TLS cert,
-// connection refused) used to look like a success. To catch exactly those
-// cases we first issue a `no-cors` fetch to the embed URL: the opaque
-// response resolves for *any* HTTP status (even 4xx/5xx) but rejects on
-// network-level failure. A reject skips the provider instantly; a resolve or
-// a probe timeout hands over to the iframe as before.
+// What *can* be detected is a host that doesn't answer at all (NXDOMAIN, bad
+// TLS certificate, connection refused): a `no-cors` fetch resolves (opaquely)
+// for any HTTP status but rejects on network-level failure. So the loader:
+//   1. starts from the user's preferred provider (or the first in the list),
+//   2. skips providers whose host is unreachable,
+//   3. loads the first reachable one and stops.
+// Anything beyond that is the user's call via the source switcher / Next.
 
 (function () {
   'use strict';
 
   const PREF_KEY = 'streamcinema_preferred_provider';
-  const DEFAULT_TIMEOUT_MS = 8000;
   const PROBE_TIMEOUT_MS = 4000;
+  // If a reachable host never fires `load` (hung Cloudflare challenge, etc.)
+  // we still report resolved after this so the loading overlay doesn't sit
+  // on top of the frame forever.
+  const LOAD_GRACE_MS = 12000;
 
   function getPreferredProvider() {
     try {
@@ -36,6 +40,21 @@
     } catch (err) {
       console.warn('Could not persist preferred provider:', err);
     }
+  }
+
+  /** The provider after `currentId` in list order, wrapping around. */
+  function getNextProvider(currentId) {
+    const { PROVIDERS } = window.StreamCinemaProviders;
+    const i = PROVIDERS.findIndex((p) => p.id === currentId);
+    return PROVIDERS[(i + 1) % PROVIDERS.length];
+  }
+
+  function orderedProviders() {
+    const { PROVIDERS } = window.StreamCinemaProviders;
+    const preferred = getPreferredProvider();
+    const first = PROVIDERS.find((p) => p.id === preferred);
+    const rest = PROVIDERS.filter((p) => p.id !== preferred);
+    return first ? [first, ...rest] : PROVIDERS;
   }
 
   /**
@@ -56,24 +75,16 @@
       .finally(() => clearTimeout(timer));
   }
 
-  function orderedProviders() {
-    const { PROVIDERS } = window.StreamCinemaProviders;
-    const preferred = getPreferredProvider();
-    const first = PROVIDERS.find((p) => p.id === preferred);
-    const rest = PROVIDERS.filter((p) => p.id !== preferred);
-    return first ? [first, ...rest] : PROVIDERS;
-  }
-
   /**
    * @param {HTMLIFrameElement} iframeEl
-   * @param {{type: 'movie'|'tv', tmdbId: string|number, season?: number, episode?: number}} target
-   * @param {{onAttempt?: (id:string)=>void, onResolved?: (id:string)=>void, onAllFailed?: ()=>void, timeoutMs?: number}} [opts]
+   * @param {{type: 'movie'|'tv', tmdbId: string|number, season?: number, episode?: number, resumeAt?: number}} target
+   * @param {{onAttempt?: (id:string)=>void, onSkipped?: (id:string)=>void, onResolved?: (id:string)=>void, onAllFailed?: ()=>void}} [opts]
    * @returns {{cancel: () => void}}
    */
   function loadPlayer(iframeEl, target, opts = {}) {
-    const timeoutMs = opts.timeoutMs || DEFAULT_TIMEOUT_MS;
     const queue = orderedProviders();
     let cancelled = false;
+    let cleanup = null;
     let index = 0;
 
     function attemptNext() {
@@ -90,6 +101,7 @@
         if (cancelled) return;
         if (!reachable) {
           console.warn(`[Player] ${provider.id} unreachable, skipping`);
+          opts.onSkipped?.(provider.id);
           attemptNext();
           return;
         }
@@ -98,28 +110,19 @@
     }
 
     function loadIntoFrame(provider, url) {
-      let settled = false;
-      const timer = setTimeout(() => settle(attemptNext), timeoutMs);
-
-      function settle(next) {
-        if (settled) return;
-        settled = true;
-        clearTimeout(timer);
-        iframeEl.removeEventListener('load', onLoad);
-        iframeEl.removeEventListener('error', onError);
-        next();
+      let done = false;
+      function resolved() {
+        if (done || cancelled) return;
+        done = true;
+        cleanup?.();
+        opts.onResolved?.(provider.id);
       }
-
-      function onLoad() {
-        settle(() => opts.onResolved?.(provider.id));
-      }
-
-      function onError() {
-        settle(attemptNext);
-      }
-
-      iframeEl.addEventListener('load', onLoad, { once: true });
-      iframeEl.addEventListener('error', onError, { once: true });
+      const grace = setTimeout(resolved, LOAD_GRACE_MS);
+      cleanup = () => {
+        clearTimeout(grace);
+        iframeEl.removeEventListener('load', resolved);
+      };
+      iframeEl.addEventListener('load', resolved, { once: true });
       iframeEl.referrerPolicy = 'origin';
       iframeEl.src = url;
     }
@@ -129,9 +132,10 @@
     return {
       cancel() {
         cancelled = true;
+        cleanup?.();
       },
     };
   }
 
-  window.StreamCinemaPlayer = { loadPlayer, getPreferredProvider, setPreferredProvider };
+  window.StreamCinemaPlayer = { loadPlayer, getPreferredProvider, setPreferredProvider, getNextProvider };
 })();

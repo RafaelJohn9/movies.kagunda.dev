@@ -533,6 +533,33 @@
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.25);
 }
 
+.source-switcher__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  padding: 0.4rem 0.85rem 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.source-switcher__next:hover {
+  border-color: var(--accent);
+  background: rgba(124, 92, 255, 0.12);
+}
+
+.source-switcher__next:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.25);
+}
+
 .source-switcher__status {
   font-size: 0.75rem;
   color: var(--text-mute);

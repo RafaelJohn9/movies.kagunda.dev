@@ -1,6 +1,6 @@
 // series.js — series detail page: season/episode selection + player.
 // Popup blocking lives in popup-blocker.js; TMDB calls in tmdb.js; provider
-// fallback/switching in providers.js + player-loader.js. Playback resume
+// selection/switching in providers.js + player-loader.js. Playback resume
 // (actual elapsed time, sourced from the provider's postMessage events) is
 // in watch-progress.js; "what was watched" is the separate Continue
 // Watching stack in storage.js.
@@ -8,7 +8,7 @@
 const { fetchFromTMDB, TMDB_IMG_BASE } = window.StreamCinemaTMDB;
 const { continueWatchingStore } = window.StreamCinemaStorage;
 const { PROVIDERS, getProvider } = window.StreamCinemaProviders;
-const { loadPlayer, getPreferredProvider, setPreferredProvider } = window.StreamCinemaPlayer;
+const { loadPlayer, getPreferredProvider, setPreferredProvider, getNextProvider } = window.StreamCinemaPlayer;
 const { watch: watchProgress, getResumeSeconds } = window.StreamCinemaProgress;
 
 // DOM Elements
@@ -32,6 +32,7 @@ const episodeListEl = document.getElementById('episodeList');
 const backToPlayerBtn = document.getElementById('backToPlayerBtn');
 const sourceSelect = document.getElementById('source-select');
 const sourceStatus = document.getElementById('source-status');
+const nextSourceBtn = document.getElementById('next-source-btn');
 const shareLinkBtn = document.getElementById('share-link-btn');
 
 // The URL is the source of truth (so a link to this page is shareable);
@@ -99,13 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
     sourceSelect.appendChild(option);
   });
   sourceSelect.value = getPreferredProvider();
-  sourceSelect.addEventListener('change', () => {
-    setPreferredProvider(sourceSelect.value);
+
+  function switchSource(providerId) {
+    sourceSelect.value = providerId;
+    setPreferredProvider(providerId);
     if (currentSeasonNumber != null && episodesForCurrentSeason.length) {
       const episode = episodesForCurrentSeason.find((ep) => ep.episode_number === Number(currentEpisodeElement.textContent));
       if (episode) loadEpisodePlayer(episode, currentSeasonNumber);
     }
-  });
+  }
+
+  sourceSelect.addEventListener('change', () => switchSource(sourceSelect.value));
+  nextSourceBtn?.addEventListener('click', () => switchSource(getNextProvider(sourceSelect.value).id));
 
   init();
 });
@@ -351,13 +357,16 @@ function loadEpisodePlayer(episode, seasonNum) {
     {
       onAttempt(providerId) {
         sourceSelect.value = providerId;
-        sourceStatus.textContent = `Trying ${getProvider(providerId).name}...`;
+        sourceStatus.textContent = `Loading ${getProvider(providerId).name}...`;
+      },
+      onSkipped(providerId) {
+        sourceStatus.textContent = `${getProvider(providerId).name} is unreachable, trying the next source...`;
       },
       onResolved(providerId) {
         loadingPlaceholder.classList.add('is-hidden');
         configDisplay.classList.remove('hidden');
         sourceSelect.value = providerId;
-        sourceStatus.textContent = `Playing via ${getProvider(providerId).name}`;
+        sourceStatus.textContent = `Via ${getProvider(providerId).name}. Not playing? Try the next source.`;
 
         episodeTitleElement.textContent = episode.name || `Episode ${episode.episode_number}`;
         currentSeasonElement.textContent = seasonNum;
@@ -383,8 +392,8 @@ function loadEpisodePlayer(episode, seasonNum) {
         });
       },
       onAllFailed() {
-        loadingText.textContent = 'ALL SOURCES FAILED — TRY ANOTHER';
-        sourceStatus.textContent = 'No source could load this episode.';
+        loadingText.textContent = 'NO SOURCE IS REACHABLE RIGHT NOW';
+        sourceStatus.textContent = 'Every source is unreachable. Check your connection and retry.';
       },
     }
   );

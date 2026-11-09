@@ -6,7 +6,11 @@
 // they were dead: vidsrc-embed.ru (NXDOMAIN), vidgod.net (NXDOMAIN),
 // vidify.top (origin down), peachify.top (Cloudflare 523), and videasy
 // (player.videasy.net 301s to player.videasy.to, which serves an invalid
-// TLS certificate, so browsers refuse the frame).
+// TLS certificate, so browsers refuse the frame). Also checked and rejected:
+// vidsrc.su ("no available servers"), vidsrc.cc (times out), vidfast
+// (Cloudflare WAF, unverifiable), cinemaos / nontongo / autoembed / vidzee /
+// vidplus (refuse to load in a frame), smashystream / rivestream / hexa /
+// autoembed.cc / embed.su (gone).
 //
 // `resumeParam` is the query param each provider reads to start playback at
 // a given second. Documented for vidlink and vidcore (both `startAt`); the
@@ -46,10 +50,29 @@
       resumeParam: 'startAt',
     },
     {
+      id: 'vidapi',
+      name: 'VidAPI',
+      // vidapi.xyz 301s to the current player host (vidapi.site at time of writing).
+      movie: (tmdbId) => `https://vidapi.xyz/embed/movie/${tmdbId}`,
+      tv: (tmdbId, season, episode) => `https://vidapi.xyz/embed/tv/${tmdbId}/${season}/${episode}`,
+    },
+    {
       id: 'vidrock',
       name: 'VidRock',
       movie: (tmdbId) => `https://vidrock.net/movie/${tmdbId}`,
       tv: (tmdbId, season, episode) => `https://vidrock.net/tv/${tmdbId}/${season}/${episode}`,
+    },
+    {
+      id: 'multiembed',
+      name: 'MultiEmbed',
+      movie: (tmdbId) => `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1`,
+      tv: (tmdbId, season, episode) => `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`,
+    },
+    {
+      id: 'vidnest',
+      name: 'VidNest',
+      movie: (tmdbId) => `https://vidnest.fun/movie/${tmdbId}`,
+      tv: (tmdbId, season, episode) => `https://vidnest.fun/tv/${tmdbId}/${season}/${episode}`,
     },
     {
       id: '2embed',
