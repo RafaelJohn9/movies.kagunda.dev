@@ -1,7 +1,7 @@
 // watch-progress.js — best-effort playback resume.
 //
 // Embeds are cross-origin iframes, so we can't read a <video> element
-// directly. Some providers (the vidsrc/vidapi family, vidcore) instead
+// directly. Some providers (vidlink, vidcore) instead
 // broadcast a `PLAYER_EVENT` message to the parent window with playback
 // progress. We listen for that, persist it via watchProgressStore, and feed
 // it back in as a start-time query param on the next load (see

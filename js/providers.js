@@ -1,28 +1,42 @@
 // providers.js — registry of streaming embed sources. Each provider is a pair
 // of URL builders (movie / tv) keyed off a TMDB id, no API key required.
 //
-// TV episode URL patterns for videasy, vidify, and peachify are inferred from
-// the `/tv/{id}/{season}/{episode}` convention shared by vidsrc/vidcore/vidgod
-// (their own docs were behind a verification wall / 403 when checked) — a
-// wrong pattern here just means player-loader.js falls through to the next
-// provider, so this is a safe default rather than a hard requirement.
+// Every host here was verified to render a working player inside an iframe
+// (headless Chrome, movie + TV) on 2026-11-09. Dropped on that date because
+// they were dead: vidsrc-embed.ru (NXDOMAIN), vidgod.net (NXDOMAIN),
+// vidify.top (origin down), peachify.top (Cloudflare 523), and videasy
+// (player.videasy.net 301s to player.videasy.to, which serves an invalid
+// TLS certificate, so browsers refuse the frame).
 //
 // `resumeParam` is the query param each provider reads to start playback at
-// a given second. Confirmed for vidcore (`startAt`) and the vidsrc/vidapi
-// family (`resumeAt`); the rest are inferred from that same `resumeAt`
-// convention. Same reasoning as above: an unrecognized param is just
-// ignored by the provider, so a wrong guess only costs the resume feature,
-// not playback itself.
+// a given second. Documented for vidlink and vidcore (both `startAt`); the
+// others have no documented resume param, so buildEmbedUrl falls back to a
+// generic `resumeAt` that they simply ignore — a wrong guess only costs the
+// resume feature, not playback itself.
+//
+// VidLink and VidCore also postMessage `PLAYER_EVENT` progress updates to the
+// parent, which watch-progress.js consumes, so they're the only two providers
+// where "continue watching" is fully round-tripped. VidLink goes first for
+// that reason.
 
 (function () {
   'use strict';
 
   const PROVIDERS = [
     {
+      id: 'vidlink',
+      name: 'VidLink',
+      movie: (tmdbId) => `https://vidlink.pro/movie/${tmdbId}?autoplay=true`,
+      tv: (tmdbId, season, episode) => `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}?autoplay=true&nextbutton=true`,
+      resumeParam: 'startAt',
+    },
+    {
       id: 'vidsrc',
       name: 'VidSrc',
-      movie: (tmdbId) => `https://vidsrc-embed.ru/embed/movie/${tmdbId}?ref=${encodeURIComponent(window.location.origin)}`,
-      tv: (tmdbId, season, episode) => `https://vidsrc-embed.ru/embed/tv/${tmdbId}/${season}/${episode}`,
+      // vidsrc.me is the long-lived alias; it 301s to whatever the current
+      // player domain is (vidsrc.sh at time of writing).
+      movie: (tmdbId) => `https://vidsrc.me/embed/movie/${tmdbId}`,
+      tv: (tmdbId, season, episode) => `https://vidsrc.me/embed/tv/${tmdbId}/${season}/${episode}`,
     },
     {
       id: 'vidcore',
@@ -32,28 +46,18 @@
       resumeParam: 'startAt',
     },
     {
-      id: 'videasy',
-      name: 'Videasy',
-      movie: (tmdbId) => `https://player.videasy.net/movie/${tmdbId}`,
-      tv: (tmdbId, season, episode) => `https://player.videasy.net/tv/${tmdbId}/${season}/${episode}`,
+      id: 'vidrock',
+      name: 'VidRock',
+      movie: (tmdbId) => `https://vidrock.net/movie/${tmdbId}`,
+      tv: (tmdbId, season, episode) => `https://vidrock.net/tv/${tmdbId}/${season}/${episode}`,
     },
     {
-      id: 'vidgod',
-      name: 'VidGod',
-      movie: (tmdbId) => `https://vidgod.net/movie/${tmdbId}`,
-      tv: (tmdbId, season, episode) => `https://vidgod.net/tv/${tmdbId}/${season}/${episode}`,
-    },
-    {
-      id: 'vidify',
-      name: 'Vidify',
-      movie: (tmdbId) => `https://player.vidify.top/embed/movie/${tmdbId}`,
-      tv: (tmdbId, season, episode) => `https://player.vidify.top/embed/tv/${tmdbId}/${season}/${episode}`,
-    },
-    {
-      id: 'peachify',
-      name: 'Peachify',
-      movie: (tmdbId) => `https://peachify.top/embed/movie/${tmdbId}`,
-      tv: (tmdbId, season, episode) => `https://peachify.top/embed/tv/${tmdbId}/${season}/${episode}`,
+      id: '2embed',
+      name: '2Embed',
+      // Note the non-standard TV path: `embedtv/{id}&s={s}&e={e}` (that's a
+      // literal `&` in the path, not a query string).
+      movie: (tmdbId) => `https://www.2embed.cc/embed/${tmdbId}`,
+      tv: (tmdbId, season, episode) => `https://www.2embed.cc/embedtv/${tmdbId}&s=${season}&e=${episode}`,
     },
   ];
 
