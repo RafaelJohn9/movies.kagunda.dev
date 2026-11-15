@@ -331,6 +331,8 @@ async function goToAdjacentEpisode(direction) {
   loadEpisodePlayer(targetEpisode, targetSeason.season_number);
 }
 
+const speedControl = window.StreamCinemaSpeed.init(playerFrame, document.getElementById('speed-select'));
+
 function loadEpisodePlayer(episode, seasonNum) {
   if (!episode) return;
 
@@ -364,6 +366,7 @@ function loadEpisodePlayer(episode, seasonNum) {
       },
       onResolved(providerId) {
         loadingPlaceholder.classList.add('is-hidden');
+        speedControl.apply();
         configDisplay.classList.remove('hidden');
         sourceSelect.value = providerId;
         sourceStatus.textContent = `Via ${getProvider(providerId).name}. Not playing? Try the next source.`;

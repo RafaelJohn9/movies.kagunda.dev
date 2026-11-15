@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   sourceSelect.value = getPreferredProvider();
 
+  const speedControl = window.StreamCinemaSpeed.init(iframe, document.getElementById('speed-select'));
+
   let activeLoad = null;
   let activeProgressWatch = null;
 
@@ -86,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         onResolved(providerId) {
           loadingOverlay.classList.add('is-hidden');
+          speedControl.apply();
           sourceSelect.value = providerId;
           sourceStatus.textContent = `Via ${getProvider(providerId).name}. Not playing? Try the next source.`;
           continueWatchingStore.push({ type: 'movie', tmdbId: movieId, title: movieName });
